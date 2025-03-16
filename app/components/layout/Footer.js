@@ -33,8 +33,8 @@ const Footer = () => {
               <li className="flex items-start">
                 <Clock className="h-5 w-5 ml-2 text-primary mt-1" />
                 <div>
-                  <p>ימים א'-ה': 09:00-19:00</p>
-                  <p>יום ו': 09:00-13:00</p>
+                  <p>ימים א&apos;-ה&apos;: 09:00-19:00</p>
+                  <p>יום ו&apos;: 09:00-13:00</p>
                   <p>שבת: סגור</p>
                 </div>
               </li>
