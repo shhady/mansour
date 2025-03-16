@@ -13,8 +13,7 @@ export const metadata = {
 
 export default function Home() {
   return (
-    // <MainLayout>
-    <>
+    <MainLayout>
       <Hero />
       <div className="relative z-10 bg-white">
         <DoctorsIntro />
@@ -23,7 +22,6 @@ export default function Home() {
         <TestimonialsSection />
         <CtaSection />
       </div>
-    </>
-    // </MainLayout>
+    </MainLayout>
   );
 }

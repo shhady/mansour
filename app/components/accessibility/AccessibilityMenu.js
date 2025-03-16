@@ -26,10 +26,46 @@ const AccessibilityMenu = () => {
     setContrast(savedContrast);
     setReducedMotion(savedReducedMotion);
     
+    // Define functions inside useEffect to avoid dependency issues
+    const applyTextSizeEffect = (size) => {
+      document.body.classList.remove(
+        'text-size-normal',
+        'text-size-large',
+        'text-size-larger',
+        'text-size-largest'
+      );
+      
+      document.body.classList.add(`text-size-${size}`);
+      localStorage.setItem('textSize', size);
+    };
+
+    const applyContrastEffect = (mode) => {
+      document.body.classList.remove(
+        'high-contrast',
+        'yellow-on-black'
+      );
+      
+      if (mode !== 'default') {
+        document.body.classList.add(mode);
+      }
+      
+      localStorage.setItem('contrast', mode);
+    };
+
+    const applyReducedMotionEffect = (enabled) => {
+      if (enabled) {
+        document.body.classList.add('reduce-motion');
+      } else {
+        document.body.classList.remove('reduce-motion');
+      }
+      
+      localStorage.setItem('reducedMotion', enabled);
+    };
+    
     // Apply saved preferences
-    applyTextSize(savedTextSize);
-    applyContrast(savedContrast);
-    applyReducedMotion(savedReducedMotion);
+    applyTextSizeEffect(savedTextSize);
+    applyContrastEffect(savedContrast);
+    applyReducedMotionEffect(savedReducedMotion);
   }, []);
 
   // Handle click outside to close menu
@@ -67,7 +103,9 @@ const AccessibilityMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const applyTextSize = (size) => {
+  const handleTextSizeChange = (size) => {
+    setTextSize(size);
+    
     if (!mounted) return;
     
     document.body.classList.remove(
@@ -81,7 +119,9 @@ const AccessibilityMenu = () => {
     localStorage.setItem('textSize', size);
   };
 
-  const applyContrast = (mode) => {
+  const handleContrastChange = (mode) => {
+    setContrast(mode);
+    
     if (!mounted) return;
     
     document.body.classList.remove(
@@ -96,32 +136,19 @@ const AccessibilityMenu = () => {
     localStorage.setItem('contrast', mode);
   };
 
-  const applyReducedMotion = (enabled) => {
+  const handleReducedMotionChange = () => {
+    const newValue = !reducedMotion;
+    setReducedMotion(newValue);
+    
     if (!mounted) return;
     
-    if (enabled) {
+    if (newValue) {
       document.body.classList.add('reduce-motion');
     } else {
       document.body.classList.remove('reduce-motion');
     }
     
-    localStorage.setItem('reducedMotion', enabled);
-  };
-
-  const handleTextSizeChange = (size) => {
-    setTextSize(size);
-    applyTextSize(size);
-  };
-
-  const handleContrastChange = (mode) => {
-    setContrast(mode);
-    applyContrast(mode);
-  };
-
-  const handleReducedMotionChange = () => {
-    const newValue = !reducedMotion;
-    setReducedMotion(newValue);
-    applyReducedMotion(newValue);
+    localStorage.setItem('reducedMotion', newValue);
   };
 
   if (!mounted) return null;
