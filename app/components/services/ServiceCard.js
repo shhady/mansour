@@ -36,7 +36,7 @@ export const ServiceCard = ({ service, className }) => {
           </p>
           
           {/* Doctor name with styled badge */}
-          <div className="mt-auto">
+          <div className="flex justify-between items-center">
             <div className="inline-block bg-gray-100 text-primary text-sm px-3 py-1 rounded-full mb-4">
               {service.doctor}
             </div>
