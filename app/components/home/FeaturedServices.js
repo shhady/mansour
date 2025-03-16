@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Section, SectionHeader, SectionTitle, SectionDescription } from '../ui/Section';
 import { ServiceCard } from '../services/ServiceCard';
 import { featuredServices } from '../../data/services';
@@ -11,11 +11,39 @@ import { prefersReducedMotion } from '../../lib/utils';
 const FeaturedServices = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     setIsMounted(true);
     setReducedMotion(prefersReducedMotion());
   }, []);
+
+  useEffect(() => {
+    if (autoplay) {
+      intervalRef.current = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % featuredServices.length);
+      }, 5000);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [autoplay]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % featuredServices.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + featuredServices.length) % featuredServices.length);
+  };
+
+  const handleMouseEnter = () => setAutoplay(false);
+  const handleMouseLeave = () => setAutoplay(true);
 
   return (
     <Section 
@@ -40,7 +68,8 @@ const FeaturedServices = () => {
           </SectionDescription>
         </SectionHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        {/* Desktop view - grid */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           {featuredServices.map((service, index) => (
             <div 
               key={service.id} 
@@ -55,6 +84,58 @@ const FeaturedServices = () => {
               <ServiceCard service={service} />
             </div>
           ))}
+        </div>
+
+        {/* Mobile view - carousel */}
+        <div 
+          className="md:hidden mt-12 relative"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="overflow-hidden">
+            <div 
+              className="flex flex-row-reverse transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(${-currentSlide * 100}%)` }}
+            >
+              {featuredServices.map((service) => (
+                <div key={service.id} className="w-full flex-shrink-0 px-2">
+                  <ServiceCard service={service} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation buttons */}
+          <div className="flex justify-center mt-6 gap-2">
+            <button 
+              onClick={prevSlide}
+              className="p-2 rounded-full bg-white text-primary border border-gray-200 hover:bg-gray-100 shadow-sm"
+              aria-label="השירות הקודם"
+            >
+              <ArrowRight className="h-5 w-5" />
+            </button>
+            <button 
+              onClick={nextSlide}
+              className="p-2 rounded-full bg-white text-primary border border-gray-200 hover:bg-gray-100 shadow-sm"
+              aria-label="השירות הבא"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Dots indicator */}
+          <div className="flex justify-center mt-4">
+            {featuredServices.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`h-2 w-2 mx-1 rounded-full transition-colors ${
+                  currentSlide === index ? 'bg-primary' : 'bg-gray-300'
+                }`}
+                aria-label={`עבור לשירות ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
         <div className="mt-16 text-center">

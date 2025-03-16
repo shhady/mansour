@@ -10,20 +10,6 @@ import { prefersReducedMotion } from '../../lib/utils';
 
 const doctors = [
   {
-    id: 'muhammad',
-    name: 'ד״ר מוחמד מנסור',
-    title: 'מומחה בכירורגיה פלסטית',
-    bio: 'ד״ר מוחמד מנסור הוא מומחה בכירורגיה פלסטית, בוגר בית הספר לרפואה של האוניברסיטה העברית - הדסה עין כרם, ירושלים. הוא השלים את ההתמחות שלו במרכז הרפואי רבין (בילינסון) והצטרף לכללית במחוז הצפון (עפולה). תחומי המחקר שלו כוללים אנסטומוזה מיקרווסקולרית, ריפוי פצעים ושחזור שד.',
-    bgColor: 'white',
-    image: '/dr-mohamed.png',
-    link: '/about#muhammad',
-    highlights: [
-      { icon: <GraduationCap className="h-4 w-4" />, text: 'בוגר האוניברסיטה העברית' },
-      { icon: <Award className="h-4 w-4" />, text: 'מומחה בכירורגיה פלסטית' },
-      { icon: <Stethoscope className="h-4 w-4" />, text: 'ניסיון של 15+ שנים' },
-    ]
-  },
-  {
     id: 'ahmad',
     name: 'ד״ר אחמד מנסור',
     title: 'אופתלמולוג ומנתח אוקולופלסטי',
@@ -37,10 +23,24 @@ const doctors = [
       { icon: <Stethoscope className="h-4 w-4" />, text: 'ניסיון של 12+ שנים' },
     ]
   },
+  {
+    id: 'muhammad',
+    name: 'ד״ר מוחמד מנסור',
+    title: 'מומחה בכירורגיה פלסטית',
+    bio: 'ד״ר מוחמד מנסור הוא מומחה בכירורגיה פלסטית, בוגר בית הספר לרפואה של האוניברסיטה העברית - הדסה עין כרם, ירושלים. הוא השלים את ההתמחות שלו במרכז הרפואי רבין (בילינסון) והצטרף לכללית במחוז הצפון (עפולה). תחומי המחקר שלו כוללים אנסטומוזה מיקרווסקולרית, ריפוי פצעים ושחזור שד.',
+    bgColor: 'white',
+    image: '/dr-mohamed.png',
+    link: '/about#muhammad',
+    highlights: [
+      { icon: <GraduationCap className="h-4 w-4" />, text: 'בוגר האוניברסיטה העברית' },
+      { icon: <Award className="h-4 w-4" />, text: 'מומחה בכירורגיה פלסטית' },
+      { icon: <Stethoscope className="h-4 w-4" />, text: 'ניסיון של 15+ שנים' },
+    ]
+  },
+ 
 ];
 
 const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef(null);
   
   const animationClasses = isVisible 
@@ -56,15 +56,13 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
       ref={cardRef}
       className={`flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 mb-24 last:mb-0 transition-all duration-1000 ${animationClasses}`}
       style={{ transitionDelay: '300ms' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Image Container with hover effect */}
+      {/* Image Container with animation effect */}
       <div className="md:w-1/3 relative overflow-hidden rounded-xl group transform transition-all duration-500 hover:shadow-2xl">
         <div className="aspect-[3/4] relative bg-gradient-to-br shadow-lg">
           {/* Background gradient */}
           <div 
-            className={`absolute inset-0 bg-gradient-to-br ${doctor.bgColor} transition-all duration-500 ${isHovered ? 'opacity-80' : 'opacity-100'}`}
+            className={`absolute inset-0 bg-gradient-to-br ${doctor.bgColor} transition-all duration-500 ${isVisible ? 'opacity-80' : 'opacity-100'}`}
           ></div>
           
           {/* Doctor image */}
@@ -74,7 +72,7 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
               alt={doctor.name} 
               fill 
               sizes="(max-width: 768px) 100vw, 33vw"
-              className={`object-contain object-center transition-all duration-700 ${isHovered ? 'scale-105' : 'scale-100'}`}
+              className={`object-contain object-center transition-all duration-700 ${isVisible ? 'scale-105' : 'scale-100'}`}
               priority
             />
           </div>
@@ -82,10 +80,10 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
           {/* Decorative elements */}
           <div className="absolute inset-0 opacity-20">
             <div 
-              className={`absolute top-[20%] left-[20%] w-32 h-32 rounded-full bg-white/30 blur-xl transition-all duration-700 ${isHovered ? 'scale-125 translate-x-5' : ''}`}
+              className={`absolute top-[20%] left-[20%] w-32 h-32 rounded-full bg-white/30 blur-xl transition-all duration-700 ${isVisible ? 'scale-125 translate-x-5' : ''}`}
             ></div>
             <div 
-              className={`absolute bottom-[20%] right-[20%] w-40 h-40 rounded-full bg-white/20 blur-xl transition-all duration-700 ${isHovered ? 'scale-125 -translate-x-5' : ''}`}
+              className={`absolute bottom-[20%] right-[20%] w-40 h-40 rounded-full bg-white/20 blur-xl transition-all duration-700 ${isVisible ? 'scale-125 -translate-x-5' : ''}`}
             ></div>
           </div>
           
@@ -95,15 +93,15 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
             style={{
               backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'1.5\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'1.5\'/%3E%3C/g%3E%3C/svg%3E")',
               backgroundSize: '20px 20px',
-              transform: isHovered ? 'translateY(-10px)' : 'translateY(0)',
+              transform: isVisible ? 'translateY(-10px)' : 'translateY(0)',
               transition: 'transform 0.5s ease-out'
             }}
           ></div>
         </div>
         
-        {/* Hover overlay with button */}
+        {/* Overlay with button - visible on scroll */}
         <div 
-          className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex items-end transition-all duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex items-end transition-all duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         >
           <div className="p-6 w-full">
             <Button 
@@ -124,12 +122,12 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
         <h3 className="text-2xl md:text-3xl font-bold mb-2 text-black relative inline-block">
           {doctor.name}
           <span 
-            className={`absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-700 ${isHovered ? 'w-full' : 'w-0'}`}
+            className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-700 ${isVisible ? 'w-full' : 'w-0'}`}
           ></span>
         </h3>
         
         {/* Title with fade-in effect */}
-        <p className={`text-primary text-lg mb-6 transition-all duration-500 ${isHovered ? 'text-primary-dark' : 'text-primary'}`}>
+        <p className={`text-primary text-lg mb-6 transition-all duration-500 ${isVisible ? 'text-primary-dark' : 'text-primary'}`}>
           {doctor.title}
         </p>
         
@@ -137,7 +135,7 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
         <p 
           className="text-gray-600 mb-8 leading-relaxed transition-all duration-500"
           style={{ 
-            lineHeight: isHovered ? '1.8' : '1.6',
+            lineHeight: isVisible ? '1.8' : '1.6',
           }}
         >
           {doctor.bio}
@@ -150,9 +148,9 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
               key={index} 
               className={`flex items-center gap-2 text-sm text-gray-700 transition-all duration-500`}
               style={{ 
-                transitionDelay: `${index * 100}ms`,
-                transform: isHovered ? 'translateY(0)' : 'translateY(10px)',
-                opacity: isHovered ? 1 : 0
+                transitionDelay: `${(index * 100) + 400}ms`,
+                transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+                opacity: isVisible ? 1 : 0
               }}
             >
               <div className="bg-primary/10 p-2 rounded-full text-primary">
@@ -180,34 +178,50 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
 };
 
 const DoctorsIntro = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [visibleDoctors, setVisibleDoctors] = useState([]);
   const [reducedMotion, setReducedMotion] = useState(false);
   const sectionRef = useRef(null);
+  const doctorRefs = useRef([]);
 
   useEffect(() => {
     setReducedMotion(prefersReducedMotion());
     
-    const observer = new IntersectionObserver(
+    // Observer for the section
+    const sectionObserver = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          }
-        });
+        if (entries[0].isIntersecting) {
+          // When section is visible, start observing individual doctor cards
+          doctorRefs.current.forEach((ref, index) => {
+            if (ref) {
+              doctorObserver.observe(ref);
+            }
+          });
+        }
       },
       { threshold: 0.1 }
     );
 
-    const currentSectionRef = sectionRef.current;
-    
-    if (currentSectionRef) {
-      observer.observe(currentSectionRef);
+    // Observer for individual doctor cards
+    const doctorObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const doctorId = entry.target.getAttribute('data-doctor-id');
+            setVisibleDoctors(prev => [...prev, doctorId]);
+            doctorObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      sectionObserver.observe(sectionRef.current);
     }
 
     return () => {
-      if (currentSectionRef) {
-        observer.disconnect();
-      }
+      sectionObserver.disconnect();
+      doctorObserver.disconnect();
     };
   }, []);
 
@@ -228,7 +242,7 @@ const DoctorsIntro = () => {
       <div className="container mx-auto px-4 relative z-10">
         <SectionHeader centered>
           <div 
-            className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}
+            className={`transition-all duration-1000 ${visibleDoctors.length > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}
           >
             <div className="inline-block bg-primary/10 text-primary px-4 py-2 rounded-full mb-6">
               הצוות הרפואי המוביל
@@ -246,16 +260,21 @@ const DoctorsIntro = () => {
         
         <SectionContent>
           {doctors.map((doctor, index) => (
-            <DoctorCard 
-              key={doctor.id} 
-              doctor={doctor} 
-              reverse={index % 2 !== 0} 
-              isVisible={isVisible && !reducedMotion}
-            />
+            <div 
+              key={doctor.id}
+              ref={el => doctorRefs.current[index] = el}
+              data-doctor-id={doctor.id}
+            >
+              <DoctorCard 
+                doctor={doctor} 
+                reverse={index % 2 !== 0} 
+                isVisible={visibleDoctors.includes(doctor.id) && !reducedMotion}
+              />
+            </div>
           ))}
           
           <div 
-            className={`text-center mt-16 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            className={`text-center mt-16 transition-all duration-1000 delay-700 ${visibleDoctors.length === doctors.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             <Button 
               href="/about"

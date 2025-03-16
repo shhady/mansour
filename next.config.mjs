@@ -17,6 +17,10 @@ const nextConfig = {
     domains: [],
     remotePatterns: [],
   },
+  // Ensure proper CSS handling
+  cssModules: true,
+  // Disable source maps in production
+  productionBrowserSourceMaps: false,
   // Ensure proper output settings
   output: 'standalone',
   // Add server configuration
@@ -27,6 +31,12 @@ const nextConfig = {
   publicRuntimeConfig: {
     // Will be available on both server and client
   },
+  // Ensure proper asset prefix
+  assetPrefix: process.env.NODE_ENV === 'production' ? undefined : '',
+  // Ensure proper trailing slash
+  trailingSlash: false,
+  // Ensure proper powered by header
+  poweredByHeader: false,
 };
 
 export default nextConfig;
