@@ -8,7 +8,7 @@ export default function TestimonialCard({ testimonial }) {
       <div className="p-6 flex-grow">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
-            <div className="w-12 h-12 rounded-full overflow-hidden relative mr-4 border-2 border-primary">
+            {/* <div className="w-12 h-12 rounded-full overflow-hidden relative mr-4 border-2 border-primary">
               <Image
                 src={testimonial.image}
                 alt={testimonial.name}
@@ -16,7 +16,7 @@ export default function TestimonialCard({ testimonial }) {
                 className="object-cover"
                 sizes="48px"
               />
-            </div>
+            </div> */}
             <div>
               <h3 className="font-bold text-lg">{testimonial.name}</h3>
               <p className="text-gray-600 text-sm">{testimonial.location}</p>
