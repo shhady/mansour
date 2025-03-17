@@ -274,7 +274,7 @@ const DoctorsIntro = () => {
           ))}
           
           <div 
-            className={`text-center mt-16 transition-all duration-1000 delay-700 ${visibleDoctors.length === doctors.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            className={`text-center mt-16 transition-all duration-1000 delay-100`}
           >
             <Button 
               href="/doctors"

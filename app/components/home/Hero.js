@@ -31,7 +31,7 @@ const Hero = () => {
   return (
     <section 
       ref={heroRef} 
-      className="relative min-h-[100vh] flex items-center"
+      className="relative min-h-[100vh] flex items-start md:items-center"
       aria-label="מידע על המרכז הרפואי"
     >
       {/* Background with gradient effect */}
