@@ -67,11 +67,11 @@ const Header = () => {
             </Link>
               
             <Link 
-              href="/doctors" 
+              href="/about" 
               className="px-4 py-2 text-black hover:text-primary transition-colors"
               onClick={closeMenu}
             >
-              הרופאים
+              אודות
             </Link>
             <Link 
               href="/services" 
@@ -80,7 +80,7 @@ const Header = () => {
             >
               שירותים
             </Link>
-            <Link 
+            {/* <Link 
               href="/gallery" 
               className="px-4 py-2 text-black hover:text-primary transition-colors"
               onClick={closeMenu}
@@ -93,7 +93,7 @@ const Header = () => {
               onClick={closeMenu}
             >
               המלצות
-            </Link>
+            </Link> */}
             <Link 
               href="/blog" 
               className="px-4 py-2 text-black hover:text-primary transition-colors"
@@ -129,12 +129,12 @@ const Header = () => {
               </Link>
              
               <Link 
-                href="/doctors" 
-                className="px-4 py-2 text-black hover:text-primary transition-colors"
-                onClick={closeMenu}
-              >
-                הרופאים
-              </Link>
+              href="/about" 
+              className="px-4 py-2 text-black hover:text-primary transition-colors"
+              onClick={closeMenu}
+            >
+              אודות
+            </Link>
               <Link 
                 href="/services" 
                 className="px-4 py-2 text-black hover:text-primary transition-colors"
@@ -142,7 +142,7 @@ const Header = () => {
               >
                 שירותים
               </Link>
-              <Link 
+              {/* <Link 
                 href="/gallery" 
                 className="px-4 py-2 text-black hover:text-primary transition-colors"
                 onClick={closeMenu}
@@ -155,7 +155,7 @@ const Header = () => {
                 onClick={closeMenu}
               >
                 המלצות
-              </Link>
+              </Link> */}
               <Link 
                 href="/blog" 
                 className="px-4 py-2 text-black hover:text-primary transition-colors"

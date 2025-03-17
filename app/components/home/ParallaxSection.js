@@ -3,13 +3,95 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { prefersReducedMotion } from '../../lib/utils';
-import { ArrowRight, Sparkles, Leaf, Heart, ArrowLeft } from 'lucide-react';
+import { ArrowRight, Sparkles, Leaf, Heart, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ParallaxSection = () => {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
   const sectionRef = useRef(null);
+  const sliderRef = useRef(null);
+  const autoplayTimerRef = useRef(null);
+
+  // Feature cards data
+  const featureCards = [
+    {
+      icon: <Sparkles className="text-primary h-7 w-7" aria-hidden="true" />,
+      iconBg: "bg-primary/10",
+      title: "טכנולוגיה מתקדמת",
+      description: "אנו משתמשים בציוד הרפואי המתקדם ביותר לאבחון וטיפול",
+      bgColor: "bg-white/90",
+      mdMt: ""
+    },
+    {
+      icon: <Leaf className="text-secondary h-7 w-7" aria-hidden="true" />,
+      iconBg: "bg-secondary/10",
+      title: "סביבה מרגיעה",
+      description: "הקליניקה מעוצבת להעניק תחושת רוגע ונינוחות",
+      bgColor: "bg-white/90",
+      mdMt: "md:mt-10"
+    },
+    {
+      icon: <Heart className="text-primary h-7 w-7" aria-hidden="true" />,
+      title: "טיפול אישי",
+      iconBg: "bg-primary/10",
+      description: "אנו מתאימים את הטיפול באופן אישי לכל מטופל",
+      bgColor: "bg-white/90",
+      mdMt: ""
+    },
+    {
+      title: "+5,000",
+      subtitle: "מטופלים מרוצים",
+      description: "הצטרפו למשפחת המטופלים שלנו",
+      bgColor: "bg-primary text-white",
+      isStatsCard: true,
+      mdMt: "md:mt-10"
+    }
+  ];
+
+  const nextSlide = () => {
+    setCurrentSlide(prev => (prev === featureCards.length - 1 ? 0 : prev + 1));
+    // Reset autoplay timer when manually navigating
+    resetAutoplayTimer();
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide(prev => (prev === 0 ? featureCards.length - 1 : prev - 1));
+    // Reset autoplay timer when manually navigating
+    resetAutoplayTimer();
+  };
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+    // Reset autoplay timer when manually navigating
+    resetAutoplayTimer();
+  };
+
+  const resetAutoplayTimer = () => {
+    if (autoplayTimerRef.current) {
+      clearInterval(autoplayTimerRef.current);
+    }
+    
+    if (autoplay) {
+      autoplayTimerRef.current = setInterval(() => {
+        setCurrentSlide(prev => (prev === featureCards.length - 1 ? 0 : prev + 1));
+      }, 4000);
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setAutoplay(false);
+    if (autoplayTimerRef.current) {
+      clearInterval(autoplayTimerRef.current);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setAutoplay(true);
+    resetAutoplayTimer();
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -32,12 +114,43 @@ const ParallaxSection = () => {
       observer.observe(currentSectionRef);
     }
 
+    // Initialize autoplay timer
+    resetAutoplayTimer();
+
     return () => {
       if (currentSectionRef) {
         observer.unobserve(currentSectionRef);
       }
+      // Clear autoplay timer on unmount
+      if (autoplayTimerRef.current) {
+        clearInterval(autoplayTimerRef.current);
+      }
     };
-  }, []);
+  }, [autoplay]);
+
+  // Render a feature card
+  const renderFeatureCard = (card, index) => {
+    if (card.isStatsCard) {
+      return (
+        <div className={`${card.bgColor} p-6 rounded-lg shadow-lg transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl ${card.mdMt}`}>
+          <h3 className="text-2xl font-bold mb-4">{card.title}</h3>
+          <p className="text-lg">{card.subtitle}</p>
+          <div className="w-full h-1 bg-white/30 mt-4 mb-2"></div>
+          <p className="text-sm opacity-80">{card.description}</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className={`${card.bgColor} backdrop-blur-md p-6 rounded-lg shadow-lg border border-gray-200 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl ${card.mdMt}`}>
+        <div className={`${card.iconBg} p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4`}>
+          {card.icon}
+        </div>
+        <h3 className="text-xl font-bold mb-2 text-black">{card.title}</h3>
+        <p className="text-gray-700">{card.description}</p>
+      </div>
+    );
+  };
 
   return (
     <section 
@@ -109,40 +222,74 @@ const ParallaxSection = () => {
             
             {/* Right side - Feature cards */}
             <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Feature Card 1 */}
-                <div className="bg-white/90 backdrop-blur-md p-6 rounded-lg shadow-lg border border-gray-200 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl">
-                  <div className="bg-primary/10 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                    <Sparkles className="text-primary h-7 w-7" aria-hidden="true" />
+              {/* Desktop grid - only visible on md and up */}
+              <div className="hidden md:grid md:grid-cols-2 gap-6">
+                {featureCards.map((card, index) => (
+                  <div key={index}>
+                    {renderFeatureCard(card, index)}
                   </div>
-                  <h3 className="text-xl font-bold mb-2 text-black">טכנולוגיה מתקדמת</h3>
-                  <p className="text-gray-700">אנו משתמשים בציוד הרפואי המתקדם ביותר לאבחון וטיפול</p>
+                ))}
+              </div>
+              
+              {/* Mobile slider - only visible on screens smaller than md */}
+              <div 
+                ref={sliderRef} 
+                className="md:hidden w-full" 
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onTouchStart={handleMouseEnter}
+                onTouchEnd={handleMouseLeave}
+              >
+                <div className="relative w-full">
+                  {/* Card slider container */}
+                  <div className="overflow-hidden w-full">
+                    <div 
+                      className="flex flex-row flex-nowrap transition-transform duration-300 ease-in-out w-full"
+                      dir="ltr" // Force LTR direction for the slider to work correctly
+                      style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                    >
+                      {featureCards.map((card, index) => (
+                          <div key={index} className="min-w-full w-full flex-none " dir="rtl">
+                          <div className="px-2 w-full">
+                            {renderFeatureCard(card, index)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Slider controls */}
+                  {/* <div className="flex justify-between absolute top-1/2 -translate-y-1/2 left-0 right-0 px-2 z-10">
+                    <button 
+                      onClick={prevSlide}
+                      className="bg-white/80 backdrop-blur-sm text-gray-800 p-2 rounded-full shadow-md hover:bg-white"
+                      aria-label="הכרטיס הקודם"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                    <button 
+                      onClick={nextSlide}
+                      className="bg-white/80 backdrop-blur-sm text-gray-800 p-2 rounded-full shadow-md hover:bg-white"
+                      aria-label="הכרטיס הבא"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                  </div> */}
                 </div>
                 
-                {/* Feature Card 2 */}
-                <div className="bg-white/90 backdrop-blur-md p-6 rounded-lg shadow-lg border border-gray-200 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl md:mt-10">
-                  <div className="bg-secondary/10 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                    <Leaf className="text-secondary h-7 w-7" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-black">סביבה מרגיעה</h3>
-                  <p className="text-gray-700">הקליניקה מעוצבת להעניק תחושת רוגע ונינוחות</p>
-                </div>
-                
-                {/* Feature Card 3 */}
-                <div className="bg-white/90 backdrop-blur-md p-6 rounded-lg shadow-lg border border-gray-200 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl">
-                  <div className="bg-primary/10 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                    <Heart className="text-primary h-7 w-7" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-black">טיפול אישי</h3>
-                  <p className="text-gray-700">אנו מתאימים את הטיפול באופן אישי לכל מטופל</p>
-                </div>
-                
-                {/* Stats Card */}
-                <div className="bg-primary text-white p-6 rounded-lg shadow-lg transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl md:mt-10">
-                  <h3 className="text-2xl font-bold mb-4">+5,000</h3>
-                  <p className="text-lg">מטופלים מרוצים</p>
-                  <div className="w-full h-1 bg-white/30 mt-4 mb-2"></div>
-                  <p className="text-sm opacity-80">הצטרפו למשפחת המטופלים שלנו</p>
+                {/* Slider indicators */}
+                <div className="flex justify-center mt-4 space-x-2 rtl:space-x-reverse">
+                  {featureCards.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`h-2 rounded-full transition-colors ${
+                        currentSlide === index ? 'w-6 bg-primary' : 'w-2 bg-gray-300'
+                      }`}
+                      onClick={() => goToSlide(index)}
+                      aria-label={`עבור לכרטיס ${index + 1}`}
+                      aria-current={currentSlide === index ? 'true' : 'false'}
+                    />
+                  ))}
                 </div>
               </div>
             </div>

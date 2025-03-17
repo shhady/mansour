@@ -156,7 +156,7 @@ export default function AboutPage() {
               מרכז רפואי מתקדם המציע שירותי רפואה מקצועיים בתחומי הכירורגיה הפלסטית ורפואת העיניים,
               בהובלת ד״ר מוחמד מנסור וד״ר אחמד מנסור.
             </p>
-            <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up delay-200">
+            {/* <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up delay-200">
               <Link 
                 href="#doctors" 
                 className="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-white text-primary hover:bg-gray-100 py-3 px-6 text-lg"
@@ -171,7 +171,7 @@ export default function AboutPage() {
                 קביעת תור
                 <Calendar className="mr-2 h-5 w-5" />
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -198,7 +198,7 @@ export default function AboutPage() {
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-                  <div className="flex items-start">
+                  <div className="flex items-start gap-2">
                     <div className="bg-primary/10 p-2 rounded-full text-primary mr-3">
                       <Users className="h-5 w-5" />
                     </div>
@@ -208,7 +208,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                   
-                  <div className="flex items-start">
+                  <div className="flex items-start gap-2">
                     <div className="bg-primary/10 p-2 rounded-full text-primary mr-3">
                       <Zap className="h-5 w-5" />
                     </div>
@@ -218,7 +218,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                   
-                  <div className="flex items-start">
+                  <div className="flex items-start gap-2">
                     <div className="bg-primary/10 p-2 rounded-full text-primary mr-3">
                       <Heart className="h-5 w-5" />
                     </div>
@@ -228,7 +228,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                   
-                  <div className="flex items-start">
+                  <div className="flex items-start gap-2">
                     <div className="bg-primary/10 p-2 rounded-full text-primary mr-3">
                       <Shield className="h-5 w-5" />
                     </div>
@@ -241,15 +241,15 @@ export default function AboutPage() {
                 
                 <div className="flex items-center mt-8">
                   <MapPin className="h-5 w-5 text-primary ml-2" />
-                  <span className="text-gray-700">רחוב הרצל 123, תל אביב</span>
-                </div>
+                  <span>דרך א-סולטאני 5, טירה</span>
+                  </div>
               </div>
             </div>
             
             <div className="order-1 lg:order-2 relative">
               <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/clinic-interior.jpg"
+                  src="/about-image.jpeg"
                   alt="פנים הקליניקה"
                   fill
                   className="object-cover"
@@ -258,15 +258,12 @@ export default function AboutPage() {
               </div>
               
               {/* Floating Stats */}
-              <div className="absolute -bottom-6 left-6 right-6 bg-white rounded-xl shadow-xl p-6 grid grid-cols-3 gap-4">
+              <div className="absolute -bottom-6 left-6 right-6 bg-white rounded-xl shadow-xl p-6 grid grid-cols-2 gap-4">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-primary">12+</p>
+                  <p className="text-3xl font-bold text-primary">15+</p>
                   <p className="text-sm text-gray-600">שנות ניסיון</p>
                 </div>
-                <div className="text-center border-x border-gray-200">
-                  <p className="text-3xl font-bold text-primary">8,000+</p>
-                  <p className="text-sm text-gray-600">מטופלים מרוצים</p>
-                </div>
+               
                 <div className="text-center">
                   <p className="text-3xl font-bold text-primary">15+</p>
                   <p className="text-sm text-gray-600">טיפולים מתקדמים</p>
@@ -426,15 +423,7 @@ export default function AboutPage() {
                   </Link>
                 </div>
               </div>
-              <div className="relative h-[300px] md:h-full">
-                <Image
-                  src="/cta-image.jpg"
-                  alt="קביעת תור"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
+            
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, FileText, MapPin, Clock, GraduationCap, Languages, Building2, UserRound, Stethoscope } from "lucide-react";
+import { Phone, FileText, MapPin, Clock, GraduationCap, Languages, Building2, UserRound, Stethoscope, Mail, Calendar, MessageCircle } from "lucide-react";
 
 // Metadata needs to be in a separate file for app router when using 'use client'
 // This is just for reference and will be properly implemented in layout.js
@@ -18,33 +18,93 @@ export default function DrAhmadProfile() {
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary to-primary-dark rounded-xl shadow-xl overflow-hidden mb-12">
-        <div className="flex flex-col md:flex-row items-center p-6 md:p-10">
-          <div className="md:w-1/3 mb-6 md:mb-0 flex justify-center">
-            <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-white shadow-lg">
-              <Image 
-                src="/dr-ahmad-bg.jpg" 
-                alt="ד״ר אחמד מנסור" 
-                fill
-                className="object-cover"
-                priority
-              />
+      {/* Hero Section - Business Card Style */}
+      <div className="relative w-full mb-12">
+        {/* Cover Image */}
+        <div className="w-full h-48 md:h-64 rounded-t-xl overflow-hidden relative">
+          <Image 
+            src="/cover-ahmad.webp" 
+            alt="קליניקת ד״ר אחמד מנסור" 
+            fill
+            className="object-cover object-top"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/80"></div>
+        </div>
+
+        {/* Business Card */}
+        <div className="bg-white rounded-xl shadow-xl overflow-hidden max-w-4xl mx-auto -mt-20 relative z-10">
+          <div className="flex flex-col md:flex-row items-center p-6 md:p-8">
+            {/* Profile Image */}
+            <div className="mb-6 md:mb-0 flex justify-center">
+              <div className="relative w-36 h-36 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                <Image 
+                  src="/dr-ahmad-bg.jpg" 
+                  alt="ד״ר אחמד מנסור" 
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+            
+            {/* Contact Information */}
+            <div className="md:ml-8 text-center md:text-right flex-1">
+              <h1 className="text-3xl md:text-4xl font-bold mb-2 text-primary">ד״ר אחמד מנסור</h1>
+              <h2 className="text-xl md:text-2xl font-semibold mb-4 text-gray-700">רופא עיניים מומחה | אוקולופלסטיקה</h2>
+              <p className="text-lg mb-6 text-gray-600">
+                רופא בכיר במערך העיניים של המרכז הרפואי סורוקה בבאר שבע ורכז תחום רפואת עיניים בשירותי בריאות כללית, מחוז שרון-שומרון.
+              </p>
+              
+              {/* Contact Buttons */}
+              <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-6">
+                <a 
+                  href="tel:073-2417393" 
+                  className="flex items-center justify-center gap-2 bg-primary text-white py-2 px-4 rounded-full hover:bg-primary-dark transition-colors duration-300"
+                >
+                  <Phone className="h-4 w-4" />
+                  <span className="hidden md:inline">התקשר</span>
+                </a>
+                <a 
+                  href="mailto:dr.ahmad@example.com" 
+                  className="flex items-center justify-center gap-2 bg-primary text-white py-2 px-4 rounded-full hover:bg-primary-dark transition-colors duration-300"
+                >
+                  <Mail className="h-4 w-4" />
+                  <span className="hidden md:inline">אימייל</span>
+                </a>
+                <a 
+                  href="https://wa.me/972732417393" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition-colors duration-300"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  <span className="hidden md:inline">וואטסאפ</span>
+                </a>
+                <Link 
+                  href="/appointment" 
+                  className="flex items-center justify-center gap-2 bg-secondary text-white py-2 px-4 rounded-full hover:bg-secondary-dark transition-colors duration-300"
+                >
+                  <Calendar className="h-4 w-4" />
+                  <span>קביעת תור</span>
+                </Link>
+              </div>
             </div>
           </div>
-          <div className="md:w-2/3 md:pr-6 text-white">
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">ד`&quot;ר אחמד מנסור</h1>
-            <h2 className="text-xl md:text-2xl font-semibold mb-4">רופא עיניים מומחה | אוקולופלסטיקה</h2>
-            <p className="text-lg mb-6">
-              רופא בכיר במערך העיניים של המרכז הרפואי סורוקה בבאר שבע ורכז תחום רפואת עיניים בשירותי בריאות כללית, מחוז שרון-שומרון.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="#contact" className="bg-white text-primary hover:bg-accent transition-colors duration-300 font-semibold py-2 px-6 rounded-full shadow-md">
-                צור קשר
-              </Link>
-              <Link href="#appointment" className="bg-secondary hover:bg-opacity-90 transition-colors duration-300 text-white font-semibold py-2 px-6 rounded-full shadow-md">
-                קביעת תור
-              </Link>
+          
+          {/* Quick Info Strip */}
+          <div className="bg-gray-50 p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm border-t border-gray-200">
+            <div className="flex items-center justify-center md:justify-start gap-2">
+              <MapPin className="h-4 w-4 text-primary" />
+              <span>דרך א-סולטאני 5, טירה</span>
+            </div>
+            <div className="flex items-center justify-center md:justify-start gap-2">
+              <Clock className="h-4 w-4 text-primary" />
+              <span>יום ד׳: 16:00-17:30 | יום ו׳: 08:00-10:30</span>
+            </div>
+            <div className="flex items-center justify-center md:justify-start gap-2">
+              <Phone className="h-4 w-4 text-primary" />
+              <span dir="ltr">073-2417393</span>
             </div>
           </div>
         </div>
@@ -66,7 +126,8 @@ export default function DrAhmadProfile() {
           }`}
           onClick={() => setActiveTab("specialties")}
         >
-          תחומי התמחות
+         <span className="hidden md:inline">תחומי התמחות</span>
+         <span className="md:hidden">התמחות</span>
         </button>
         <button
           className={`py-3 px-6 font-medium text-lg ${
@@ -74,16 +135,17 @@ export default function DrAhmadProfile() {
           }`}
           onClick={() => setActiveTab("education")}
         >
-          השכלה והכשרה
+        <span className="hidden md:inline">השכלה והכשרה</span>
+        <span className="md:hidden">הכשרה</span>
         </button>
-        <button
+        {/* <button
           className={`py-3 px-6 font-medium text-lg ${
             activeTab === "contact" ? "border-b-2 border-primary text-primary" : "text-gray-500 hover:text-primary"
           }`}
           onClick={() => setActiveTab("contact")}
         >
           פרטי קשר
-        </button>
+        </button> */}
       </div>
 
       {/* Content Sections */}

@@ -61,16 +61,6 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/gallery" className="hover:text-primary transition-colors">
-                  גלריה
-                </Link>
-              </li>
-              <li>
-                <Link href="/testimonials" className="hover:text-primary transition-colors">
-                  המלצות
-                </Link>
-              </li>
-              <li>
                 <Link href="/blog" className="hover:text-primary transition-colors">
                   בלוג
                 </Link>

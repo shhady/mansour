@@ -277,13 +277,13 @@ const DoctorsIntro = () => {
             className={`text-center mt-16 transition-all duration-1000 delay-100`}
           >
             <Button 
-              href="/doctors"
+              href="/about"
               variant="outline" 
               size="lg"
               className="group"
             >
               <Heart className="ml-2 h-5 w-5 text-primary group-hover:text-primary-dark transition-colors" />
-              למידע נוסף על הרופאים שלנו
+              למידע נוסף על המרפאה
             </Button>
           </div>
         </SectionContent>

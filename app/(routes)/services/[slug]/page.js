@@ -5,7 +5,8 @@ import { ArrowLeft, CheckCircle, Calendar } from 'lucide-react';
 import { featuredServices } from '../../../data/services';
 
 export async function generateMetadata({ params }) {
-  const service = featuredServices.find(service => service.slug === params.slug);
+  const serviceParams = await params;
+  const service = featuredServices.find(service => service.slug === serviceParams.slug);
   
   if (!service) {
     return {
@@ -20,8 +21,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function ServicePage({ params }) {
-  const service = featuredServices.find(service => service.slug === params.slug);
+export default async function ServicePage({ params }) {
+  const serviceParams = await params;
+  const service = featuredServices.find(service => service.slug === serviceParams.slug);
   
   if (!service) {
     notFound();
@@ -64,14 +66,6 @@ export default function ServicePage({ params }) {
                 <p className="text-lg text-gray-700 mb-8">
                   {service.fullDescription}
                 </p>
-                
-                <Link 
-                  href="/appointment" 
-                  className="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-primary hover:bg-primary-dark text-white py-3 px-6 text-lg"
-                >
-                  <Calendar className="ml-2 h-5 w-5" />
-                  קביעת תור
-                </Link>
               </div>
               
               <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden shadow-lg">

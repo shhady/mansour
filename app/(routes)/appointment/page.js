@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Calendar, Clock, Phone, Mail, CheckCircle, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, Phone, Mail, CheckCircle, AlertCircle, ChevronDown } from 'lucide-react';
 import { Section, SectionHeader, SectionTitle, SectionDescription } from '../../components/ui/Section';
 import { doctors } from '../../data/doctors';
 
@@ -25,6 +25,17 @@ export default function AppointmentPage() {
   });
   
   const [errors, setErrors] = useState({});
+  
+  // Track which FAQ items are open
+  const [openFAQs, setOpenFAQs] = useState({});
+  
+  // Toggle FAQ open/closed state
+  const toggleFAQ = (index) => {
+    setOpenFAQs(prevState => ({
+      ...prevState,
+      [index]: !prevState[index]
+    }));
+  };
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -112,77 +123,54 @@ export default function AppointmentPage() {
     return selectedDoctor ? selectedDoctor.services : [];
   };
   
+  // FAQs data
+  const faqs = [
+    {
+      question: 'כמה זמן לפני אני צריך לקבוע תור?',
+      answer: 'אנו ממליצים לקבוע תור לפחות שבוע מראש כדי להבטיח את הזמינות המועדפת עליכם. במקרים דחופים, אנו משתדלים לספק מענה מהיר ככל האפשר.'
+    },
+    {
+      question: 'האם אני יכול לבטל או לשנות את התור שלי?',
+      answer: 'כן, ניתן לבטל או לשנות את התור עד 24 שעות לפני המועד שנקבע. לביטול או שינוי, אנא צרו קשר עם המרפאה בטלפון או באימייל.'
+    },
+    {
+      question: 'מה עליי להביא לפגישה הראשונה?',
+      answer: 'לפגישה הראשונה יש להביא תעודת זהות, כרטיס קופת חולים, הפניה מרופא (אם יש), ומסמכים רפואיים רלוונטיים. אם יש לכם בדיקות או צילומים קודמים, כדאי להביא גם אותם.'
+    },
+    {
+      question: 'האם הקליניקה עובדת עם קופות החולים?',
+      answer: 'כן, הקליניקה עובדת בהסדר עם מרבית קופות החולים וחברות הביטוח. מומלץ לברר מראש את פרטי ההתקשרות עם קופת החולים שלכם.'
+    },
+    {
+      question: 'כמה זמן נמשכת פגישת ייעוץ ראשונית?',
+      answer: 'פגישת ייעוץ ראשונית נמשכת בדרך כלל כ-30 עד 45 דקות, בהתאם לסוג הטיפול והצרכים האישיים.'
+    },
+  ];
+  
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-gray-50 to-white py-20">
+      <section className="bg-gradient-to-b from-gray-50 to-white pt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">קביעת תור</h1>
             <p className="text-xl text-gray-700 mb-8">
-              מלאו את הטופס כדי לקבוע תור לייעוץ אישי עם אחד הרופאים המומחים שלנו
+              מלאו את הטופס כדי לקבוע תור לייעוץ 
             </p>
           </div>
         </div>
       </section>
       
       {/* Appointment Form */}
-      <Section className="bg-gray-50 py-20">
+      <Section className="bg-gray-50 ">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-5">
-              {/* Contact Info */}
-              <div className="lg:col-span-2 bg-primary text-white p-8">
-                <h2 className="text-2xl font-bold mb-6">פרטי יצירת קשר</h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start">
-                    <Phone className="h-6 w-6 ml-3 mt-1" aria-hidden="true" />
-                    <div>
-                      <h3 className="font-semibold text-lg">טלפון</h3>
-                      <p className="opacity-90">+972-12-345-6789</p>
-                      <p className="text-sm opacity-75 mt-1">זמין בימים א׳-ה׳, 9:00-17:00</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <Mail className="h-6 w-6 ml-3 mt-1" aria-hidden="true" />
-                    <div>
-                      <h3 className="font-semibold text-lg">אימייל</h3>
-                      <p className="opacity-90">info@mansourclinic.com</p>
-                      <p className="text-sm opacity-75 mt-1">אנו עונים תוך 24 שעות</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <Clock className="h-6 w-6 ml-3 mt-1" aria-hidden="true" />
-                    <div>
-                      <h3 className="font-semibold text-lg">שעות פעילות</h3>
-                      <p className="opacity-90">ימים א׳-ה׳: 9:00-17:00</p>
-                      <p className="opacity-90">יום ו׳: 9:00-13:00</p>
-                      <p className="opacity-90">שבת: סגור</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-12">
-                  <h3 className="text-xl font-semibold mb-4">הרופאים שלנו</h3>
-                  <ul className="space-y-3">
-                    {doctors.map(doctor => (
-                      <li key={doctor.id} className="flex items-start">
-                        <CheckCircle className="h-5 w-5 ml-2 mt-1" aria-hidden="true" />
-                        <div>
-                          <p className="font-medium">{doctor.name}</p>
-                          <p className="text-sm opacity-75">{doctor.title}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              {/* On mobile: Form first, Contact info second */}
+              {/* On desktop: Contact info (left), Form (right) */}
               
-              {/* Form */}
-              <div className="lg:col-span-3 p-8">
+              {/* Form - appears first on mobile */}
+              <div className="lg:col-span-3 lg:order-2 p-8">
                 <h2 className="text-2xl font-bold mb-6">מלאו את הפרטים</h2>
                 
                 {formStatus.submitted ? (
@@ -401,12 +389,62 @@ export default function AppointmentPage() {
                   </div>
                 </form>
               </div>
+              
+              {/* Contact Info - appears second on mobile */}
+              <div className="lg:col-span-2 lg:order-1 bg-primary text-white p-8">
+                <h2 className="text-2xl font-bold mb-6">פרטי יצירת קשר</h2>
+                
+                <div className="space-y-6">
+                  <div className="flex items-start">
+                    <Phone className="h-6 w-6 ml-3 mt-1" aria-hidden="true" />
+                    <div>
+                      <h3 className="font-semibold text-lg">טלפון</h3>
+                      <p className="opacity-90">+972-12-345-6789</p>
+                      <p className="text-sm opacity-75 mt-1">זמין בימים א׳-ה׳, 9:00-17:00</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <Mail className="h-6 w-6 ml-3 mt-1" aria-hidden="true" />
+                    <div>
+                      <h3 className="font-semibold text-lg">אימייל</h3>
+                      <p className="opacity-90">info@mansourclinic.com</p>
+                      <p className="text-sm opacity-75 mt-1">אנו עונים תוך 24 שעות</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <Clock className="h-6 w-6 ml-3 mt-1" aria-hidden="true" />
+                    <div>
+                      <h3 className="font-semibold text-lg">שעות פעילות</h3>
+                      <p className="opacity-90">ימים א׳-ה׳: 9:00-17:00</p>
+                      <p className="opacity-90">יום ו׳: 9:00-13:00</p>
+                      <p className="opacity-90">שבת: סגור</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-12">
+                  <h3 className="text-xl font-semibold mb-4">הרופאים שלנו</h3>
+                  <ul className="space-y-3">
+                    {doctors.map(doctor => (
+                      <li key={doctor.id} className="flex items-start">
+                        <CheckCircle className="h-5 w-5 ml-2 mt-1" aria-hidden="true" />
+                        <div>
+                          <p className="font-medium">{doctor.name}</p>
+                          <p className="text-sm opacity-75">{doctor.title}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </Section>
       
-      {/* FAQ Section */}
+      {/* FAQ Section - Accordion Style */}
       <Section className="bg-white py-20">
         <div className="container mx-auto px-4">
           <SectionHeader centered>
@@ -416,32 +454,33 @@ export default function AppointmentPage() {
             </SectionDescription>
           </SectionHeader>
           
-          <div className="max-w-3xl mx-auto mt-12 space-y-8">
-            {[
-              {
-                question: 'כמה זמן לפני אני צריך לקבוע תור?',
-                answer: 'אנו ממליצים לקבוע תור לפחות שבוע מראש כדי להבטיח את הזמינות המועדפת עליכם. במקרים דחופים, אנו משתדלים לספק מענה מהיר ככל האפשר.'
-              },
-              {
-                question: 'האם אני יכול לבטל או לשנות את התור שלי?',
-                answer: 'כן, ניתן לבטל או לשנות את התור עד 24 שעות לפני המועד שנקבע. לביטול או שינוי, אנא צרו קשר עם המרפאה בטלפון או באימייל.'
-              },
-              {
-                question: 'מה עליי להביא לפגישה הראשונה?',
-                answer: 'לפגישה הראשונה יש להביא תעודת זהות, כרטיס קופת חולים, הפניה מרופא (אם יש), ומסמכים רפואיים רלוונטיים. אם יש לכם בדיקות או צילומים קודמים, כדאי להביא גם אותם.'
-              },
-              {
-                question: 'האם הקליניקה עובדת עם קופות החולים?',
-                answer: 'כן, הקליניקה עובדת בהסדר עם מרבית קופות החולים וחברות הביטוח. מומלץ לברר מראש את פרטי ההתקשרות עם קופת החולים שלכם.'
-              },
-              {
-                question: 'כמה זמן נמשכת פגישת ייעוץ ראשונית?',
-                answer: 'פגישת ייעוץ ראשונית נמשכת בדרך כלל כ-30 עד 45 דקות, בהתאם לסוג הטיפול והצרכים האישיים.'
-              },
-            ].map((faq, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-6 shadow-sm">
-                <h3 className="text-xl font-bold mb-3">{faq.question}</h3>
-                <p className="text-gray-700">{faq.answer}</p>
+          <div className="max-w-3xl mx-auto mt-12 space-y-4">
+            {faqs.map((faq, index) => (
+              <div 
+                key={index} 
+                className="border border-gray-200 rounded-lg overflow-hidden"
+              >
+                <button
+                  className="w-full bg-white px-6 py-4 flex justify-between items-center focus:outline-none"
+                  onClick={() => toggleFAQ(index)}
+                  aria-expanded={openFAQs[index] ? "true" : "false"}
+                  aria-controls={`faq-answer-${index}`}
+                >
+                  <h3 className="text-lg font-medium text-gray-900 text-right">{faq.question}</h3>
+                  <ChevronDown 
+                    className={`h-5 w-5 text-primary transition-transform duration-300 ${openFAQs[index] ? 'rotate-180' : ''}`}
+                    aria-hidden="true"
+                  />
+                </button>
+                
+                <div 
+                  id={`faq-answer-${index}`}
+                  className={`overflow-hidden transition-all duration-300 ${openFAQs[index] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+                >
+                  <div className="px-6 pb-4 pt-0 text-gray-700">
+                    {faq.answer}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
