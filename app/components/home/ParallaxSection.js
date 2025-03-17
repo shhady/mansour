@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { prefersReducedMotion } from '../../lib/utils';
-import { ArrowRight, Sparkles, Leaf, Heart } from 'lucide-react';
+import { ArrowRight, Sparkles, Leaf, Heart, ArrowLeft } from 'lucide-react';
 
 const ParallaxSection = () => {
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -94,7 +94,7 @@ const ParallaxSection = () => {
                   aria-label="למידע נוסף על הקליניקה והרופאים"
                 >
                   למידע נוסף
-                  <ArrowRight className="mr-2 h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                  <ArrowLeft className="mr-2 h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </Link>
                 
                 <Link 

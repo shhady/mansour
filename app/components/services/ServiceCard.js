@@ -43,7 +43,7 @@ export const ServiceCard = ({ service, className }) => {
             
             {/* Read more link with animated arrow */}
             <Link
-              href={service.link}
+              href={`/services/${service.slug}`}
               className="inline-flex items-center text-primary hover:text-primary-dark transition-colors group/link"
             >
               <span className="border-b border-transparent group-hover/link:border-primary transition-all">קרא עוד</span>

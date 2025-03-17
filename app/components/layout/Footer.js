@@ -106,7 +106,7 @@ const Footer = () => {
             </form>
             
             <h3 className="text-xl font-bold mb-4">עקבו אחרינו</h3>
-            <div className="flex space-x-4 space-x-reverse">
+            <div className="flex gap-2">
               <a
                 href="https://facebook.com"
                 target="_blank"
@@ -125,15 +125,7 @@ const Footer = () => {
               >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 bg-primary text-on-primary rounded-full hover:bg-primary-dark transition-colors"
-                aria-label="לינקדאין"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
+              
             </div>
           </div>
         </div>
@@ -142,7 +134,7 @@ const Footer = () => {
           <p>
             &copy; {currentYear} ד״ר מוחמד מנסור וד״ר אחמד מנסור. כל הזכויות שמורות.
           </p>
-          <div className="mt-2 flex justify-center space-x-4 space-x-reverse">
+          <div className="mt-2 flex justify-center gap-2">
             <Link href="/privacy-policy" className="text-sm hover:text-primary transition-colors">
               מדיניות פרטיות
             </Link>

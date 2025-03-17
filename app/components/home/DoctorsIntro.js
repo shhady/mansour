@@ -16,7 +16,7 @@ const doctors = [
     bio: 'ד״ר אחמד מנסור הוא אופתלמולוג בכיר ומנתח אוקולופלסטי (ניתוחי עפעפיים, ארובות עיניים ודרכי דמעות) במרכז הרפואי סורוקה, באר שבע. הוא גם מתאם טיפולי עיניים בשירותי בריאות כללית, מחוז שרון-שומרון. ד״ר מנסור התמחה באופתלמולוגיה במרכז הרפואי ברזילי, אשקלון, והשלים התמחות-על בכירורגיה אוקולופלסטית במרכז הרפואי סורוקה.',
     bgColor: 'white',
     image: '/dr-ahmad-bg.jpg',
-    link: '/about#ahmad',
+    link: '/ahmad',
     highlights: [
       { icon: <GraduationCap className="h-4 w-4" />, text: 'התמחות במרכז הרפואי ברזילי' },
       { icon: <Award className="h-4 w-4" />, text: 'מומחה בכירורגיה אוקולופלסטית' },
@@ -30,7 +30,7 @@ const doctors = [
     bio: 'ד״ר מוחמד מנסור הוא מומחה בכירורגיה פלסטית, בוגר בית הספר לרפואה של האוניברסיטה העברית - הדסה עין כרם, ירושלים. הוא השלים את ההתמחות שלו במרכז הרפואי רבין (בילינסון) והצטרף לכללית במחוז הצפון (עפולה). תחומי המחקר שלו כוללים אנסטומוזה מיקרווסקולרית, ריפוי פצעים ושחזור שד.',
     bgColor: 'white',
     image: '/dr-mohamed.png',
-    link: '/about#muhammad',
+    link: '/muhammad',
     highlights: [
       { icon: <GraduationCap className="h-4 w-4" />, text: 'בוגר האוניברסיטה העברית' },
       { icon: <Award className="h-4 w-4" />, text: 'מומחה בכירורגיה פלסטית' },
@@ -104,14 +104,14 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
           className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex items-end transition-all duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         >
           <div className="p-6 w-full">
-            <Button 
-              href={doctor.link}
+           <Link href={`/doctors/${doctor.link}`}> <Button 
               variant="primary" 
               fullWidth
-              className="transform transition-all duration-300 hover:scale-105"
+              className="transform transition-all duration-300 hover:scale-105 cursor-pointer"
             >
               פרופיל מלא
             </Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -163,7 +163,7 @@ const DoctorCard = ({ doctor, reverse = false, isVisible }) => {
         
         {/* Read more link with animated arrow */}
         <Link
-          href={doctor.link}
+          href={`/doctors/${doctor.link}`}
           className="inline-flex items-center text-primary hover:text-primary-dark transition-colors group w-fit"
         >
           <span className="ml-1 relative">
@@ -277,7 +277,7 @@ const DoctorsIntro = () => {
             className={`text-center mt-16 transition-all duration-1000 delay-700 ${visibleDoctors.length === doctors.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             <Button 
-              href="/about"
+              href="/doctors"
               variant="outline" 
               size="lg"
               className="group"

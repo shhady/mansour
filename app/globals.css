@@ -6,6 +6,7 @@
   --primary: #0056b3;
   --primary-dark: #004494;
   --secondary: #00a896;
+  --secondary-dark: #008577;
   --accent: #f8f9fa;
   --muted: #6c757d;
   --muted-foreground: #6c757d;
@@ -31,9 +32,10 @@
 .light {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #0056b3;
+  --primary: #2a6586;
   --primary-dark: #004494;
   --secondary: #00a896;
+  --secondary-dark: #008577;
   --accent: #f8f9fa;
   --muted: #6c757d;
   --muted-foreground: #6c757d;
@@ -86,6 +88,7 @@
     --primary: #3b82f6;
     --primary-dark: #2563eb;
     --secondary: #10b981;
+    --secondary-dark: #0d9668;
     --accent: #1f2937;
     --muted: #9ca3af;
     --muted-foreground: #9ca3af;
@@ -115,6 +118,7 @@
   --primary: #3b82f6;
   --primary-dark: #2563eb;
   --secondary: #10b981;
+  --secondary-dark: #0d9668;
   --accent: #1f2937;
   --muted: #9ca3af;
   --muted-foreground: #9ca3af;
@@ -458,4 +462,82 @@ body {
   .parallax-section {
     background-attachment: scroll;
   }
+}
+
+/* Accessibility CSS */
+
+/* High Contrast Mode */
+.high-contrast, .high-contrast * {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #fff !important;
+}
+
+.high-contrast a, .high-contrast button {
+  color: #0ff !important;
+  text-decoration: underline !important;
+}
+
+/* Grayscale Mode */
+.grayscale {
+  filter: grayscale(100%);
+}
+
+/* Highlight Links */
+.highlight-links a {
+  background-color: yellow !important;
+  color: #000 !important;
+  font-weight: bold !important;
+  text-decoration: underline !important;
+}
+
+/* Keyboard Navigation Mode */
+.keyboard-nav *:focus {
+  outline: 3px solid red !important;
+  outline-offset: 2px !important;
+}
+
+/* Accessibility Widget Styling */
+#accessibility-root {
+  position: fixed;
+  bottom: 24px;
+  left: 16px;
+  z-index: 9999;
+  direction: rtl;
+}
+
+#accessibility-toggle {
+  background: #0056b3;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#accessibility-menu {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  width: 220px;
+  margin-top: 10px;
+}
+
+#accessibility-menu button {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#accessibility-menu button:hover {
+  background: #eee;
 }

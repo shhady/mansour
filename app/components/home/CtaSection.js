@@ -49,7 +49,7 @@ const CtaSection = () => {
           </div>
           
           <p className="mt-6 text-sm text-white opacity-80">
-            או התקשרו אלינו ישירות: <a href="tel:+972123456789" className="underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary">+972-12-345-6789</a>
+            או התקשרו אלינו ישירות: <a href="tel:+972123456789" className="underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary font-bold">+972-12-345-6789</a>
           </p>
         </div>
       </div>

@@ -220,7 +220,7 @@ export default function ServicesPage() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-gray-50 to-white py-20">
+      <section className="bg-gradient-to-b from-gray-50 to-white pt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">השירותים שלנו</h1>
@@ -233,16 +233,16 @@ export default function ServicesPage() {
       </section>
       
       {/* Featured Services */}
-      <Section className="bg-gray-50 py-20">
+      <Section className="bg-gray-50 py-4">
         <div className="container mx-auto px-4">
-          <SectionHeader centered>
+          {/* <SectionHeader centered>
             <SectionTitle>השירותים המובילים שלנו</SectionTitle>
             <SectionDescription>
               מגוון הטיפולים והשירותים המקצועיים שאנו מציעים
             </SectionDescription>
-          </SectionHeader>
+          </SectionHeader> */}
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
             {featuredServices.map((service) => (
               <ServiceCard key={service.id} service={service} />
             ))}
@@ -250,7 +250,7 @@ export default function ServicesPage() {
         </div>
       </Section>
       
-      {/* Detailed Services */}
+      {/* Detailed Services
       <Section className="bg-white py-20">
         <div className="container mx-auto px-4">
           <SectionHeader centered>
@@ -321,7 +321,7 @@ export default function ServicesPage() {
             ))}
           </div>
         </div>
-      </Section>
+      </Section> */}
       
       {/* CTA */}
       <section className="bg-primary py-16">

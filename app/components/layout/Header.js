@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Menu, X, Phone } from 'lucide-react';
 import AccessibilityMenu from '../accessibility/AccessibilityMenu';
+import Image from 'next/image';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,15 +43,16 @@ const Header = () => {
             </button>
             
             {/* Accessibility Menu */}
-            <AccessibilityMenu />
+            {/* <AccessibilityMenu /> */}
             
-            {/* Phone */}
+            {/* Phone - Enhanced with button and text */}
             <a 
               href="tel:+972123456789" 
-              className="p-2 text-black hover:text-primary transition-colors"
-              aria-label="התקשר אלינו"
+              className="hidden items-center  md:flex bg-primary text-white hover:bg-primary-dark transition-colors duration-300 py-1 px-2 md:py-2 md:px-4 rounded-md shadow-sm"
+              aria-label="התקשר"
             >
-              <Phone className="h-5 w-5" />
+              <Phone className="h-5 w-5 ml-2" />
+              <span className="font-medium">התקשר</span>
             </a>
             
           </div>
@@ -63,12 +65,13 @@ const Header = () => {
             >
               דף הבית
             </Link>
+              
             <Link 
-              href="/about" 
+              href="/doctors" 
               className="px-4 py-2 text-black hover:text-primary transition-colors"
               onClick={closeMenu}
             >
-              אודות
+              הרופאים
             </Link>
             <Link 
               href="/services" 
@@ -108,10 +111,11 @@ const Header = () => {
           </nav>
           {/* Logo */}
           <Link href="/" className="flex items-center" onClick={closeMenu}>
-            <span className="text-2xl font-bold text-primary">ד״ר מנסור</span>
+              <Image src="/logo-mansour.png" alt="ד״ר מנסור" width={160} height={100} />
+            {/* <span className="text-2xl font-bold text-primary">ד״ר מנסור</span> */}
           </Link>
         </div>
-
+       
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <nav className="md:hidden mt-4 py-4 border-t border-gray-200">
@@ -123,12 +127,13 @@ const Header = () => {
               >
                 דף הבית
               </Link>
+             
               <Link 
-                href="/about" 
+                href="/doctors" 
                 className="px-4 py-2 text-black hover:text-primary transition-colors"
                 onClick={closeMenu}
               >
-                אודות
+                הרופאים
               </Link>
               <Link 
                 href="/services" 
@@ -165,6 +170,15 @@ const Header = () => {
               >
                 קביעת תור
               </Link>
+              {/* Add call button to mobile menu as well */}
+              <a 
+                href="tel:+972123456789" 
+                className="flex items-center justify-center bg-primary/10 text-primary hover:bg-primary/20 transition-colors duration-300 py-2 px-4 rounded-md"
+                aria-label="התקשר אלינו"
+              >
+                <Phone className="h-5 w-5 ml-2" />
+                <span className="font-medium">התקשר אלינו</span>
+              </a>
             </div>
           </nav>
         )}

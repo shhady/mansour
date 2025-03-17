@@ -1,320 +1,649 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { Accessibility, Type, Contrast, MousePointerClick } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { useState, useEffect } from 'react';
 
-const AccessibilityMenu = () => {
+export default function AccessibilityWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [textSize, setTextSize] = useState('normal');
-  const [contrast, setContrast] = useState('default');
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const menuRef = useRef(null);
-  const buttonRef = useRef(null);
+  const [currentFontSize, setCurrentFontSize] = useState(100);
+  const [highContrast, setHighContrast] = useState(false);
+  const [grayscale, setGrayscale] = useState(false);
+  const [highlightLinks, setHighlightLinks] = useState(false);
+  const [keyboardNav, setKeyboardNav] = useState(false);
+  const [fullAccess, setFullAccess] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // After mounting, we can safely show the UI that depends on client-side features
+  // Create a separate container for the accessibility widget
   useEffect(() => {
-    setMounted(true);
-    
-    // Check for saved preferences
-    const savedTextSize = localStorage.getItem('textSize') || 'normal';
-    const savedContrast = localStorage.getItem('contrast') || 'default';
-    const savedReducedMotion = localStorage.getItem('reducedMotion') === 'true';
-    
-    setTextSize(savedTextSize);
-    setContrast(savedContrast);
-    setReducedMotion(savedReducedMotion);
-    
-    // Define functions inside useEffect to avoid dependency issues
-    const applyTextSizeEffect = (size) => {
-      document.body.classList.remove(
-        'text-size-normal',
-        'text-size-large',
-        'text-size-larger',
-        'text-size-largest'
-      );
-      
-      document.body.classList.add(`text-size-${size}`);
-      localStorage.setItem('textSize', size);
-    };
+    // Create container if it doesn't exist
+    let container = document.getElementById('accessibility-root');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'accessibility-root';
+      document.body.appendChild(container);
+    }
 
-    const applyContrastEffect = (mode) => {
-      document.body.classList.remove(
-        'high-contrast',
-        'yellow-on-black'
-      );
-      
-      if (mode !== 'default') {
-        document.body.classList.add(mode);
-      }
-      
-      localStorage.setItem('contrast', mode);
-    };
+    // Create style element for the widget
+    let styleElement = document.getElementById('accessibility-styles');
+    if (!styleElement) {
+      styleElement = document.createElement('style');
+      styleElement.id = 'accessibility-styles';
+      styleElement.innerHTML = `
+        #accessibility-root {
+          position: fixed;
+          bottom: 24px;
+          left: 16px;
+          z-index: 9999999;
+          font-family: system-ui, -apple-system, sans-serif;
+          direction: rtl;
+        }
+        #accessibility-root * {
+          box-sizing: border-box;
+          font-family: inherit;
+        }
+        #accessibility-toggle {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #3b82f6;
+          color: #fff;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          position: relative;
+          z-index: 9999;
+          animation: accessibilityPulse 2s infinite;
+        }
+        @keyframes accessibilityPulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+          }
+          70% {
+            box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+          }
+        }
+        #accessibility-menu {
+          display: none;
+          flex-direction: column;
+          margin-top: 5px;
+          background: #f9f9f9;
+          border: 1px solid #000;
+          border-radius: 5px;
+          padding: 10px;
+          min-width: 220px;
+        }
+        #accessibility-menu.open {
+          display: flex;
+        }
+        #accessibility-menu button {
+          display: flex;
+          width: 100%;
+          margin: 2px 0;
+          padding: 8px 10px;
+          text-align: right;
+          font-size: 14px;
+          cursor: pointer;
+          background: #fff;
+          color: #000;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+          align-items: center;
+        }
+        #accessibility-menu button:hover {
+          background: #f0f0f0;
+        }
+        #accessibility-menu button svg {
+          margin-left: 8px;
+          flex-shrink: 0;
+        }
+        /* סימון כפתורים פעילים */
+        #accessibility-menu button[aria-pressed="true"] {
+          background: #333;
+          color: #fff;
+        }
+        #accessibility-menu button[aria-pressed="true"] svg {
+          color: #fff;
+        }
+        .text-size-control {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin: 2px 0;
+          width: 100%;
+        }
+        .text-size-control button {
+          width: auto !important;
+          padding: 4px 8px !important;
+          margin: 0 !important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex: 0 0 auto;
+        }
+        .text-size-control span {
+          font-size: 14px;
+          margin: 0 8px;
+        }
+        .text-size-control .size-controls {
+          display: flex;
+          align-items: center;
+        }
 
-    const applyReducedMotionEffect = (enabled) => {
-      if (enabled) {
-        document.body.classList.add('reduce-motion');
-      } else {
-        document.body.classList.remove('reduce-motion');
-      }
-      
-      localStorage.setItem('reducedMotion', enabled);
+        /* מצב ניגודיות גבוהה */
+        body.high-contrast, body.high-contrast *:not(#accessibility-root *) {
+          background-color: #000 !important;
+          color: #fff !important;
+        }
+        body.high-contrast a:not(#accessibility-root *), 
+        body.high-contrast a:visited:not(#accessibility-root *) {
+          color: #0ff !important;
+          text-decoration: underline !important;
+        }
+
+        /* מצב גווני אפור */
+        body.grayscale {
+          filter: grayscale(100%);
+        }
+        /* Fix for position issues when grayscale is enabled */
+        body.grayscale #accessibility-root {
+          filter: none;
+          position: fixed;
+          bottom: 24px;
+          left: 16px;
+          z-index: 9999999;
+        }
+
+        /* הדגשת קישורים */
+        body.highlight-links a:not(#accessibility-root *) {
+          background-color: yellow !important;
+          color: #000 !important;
+          font-weight: bold;
+          text-decoration: underline;
+        }
+
+        /* סימון פוקוס מודגש (במצב ניווט מקלדת) */
+        body.keyboard-nav *:focus:not(#accessibility-root *) {
+          outline: 3px solid red !important;
+        }
+
+        /* Modal Styles */
+        #accessibility-modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 99999;
+          direction: rtl;
+        }
+        #accessibility-modal.open {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        #accessibility-modal-content {
+          background: #fff;
+          padding: 20px;
+          border-radius: 8px;
+          max-width: 600px;
+          width: 90%;
+          max-height: 80vh;
+          overflow-y: auto;
+          position: relative;
+        }
+        #accessibility-modal-close {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          padding: 5px;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+        }
+        #accessibility-modal-close:hover {
+          background: #f0f0f0;
+        }
+        #accessibility-modal h2 {
+          font-size: 24px;
+          margin-bottom: 20px;
+          color: #333;
+        }
+        #accessibility-modal p {
+          margin-bottom: 15px;
+          line-height: 1.6;
+          color: #444;
+        }
+        #accessibility-modal strong {
+          color: #333;
+          font-weight: 600;
+        }
+        #accessibility-statement-btn {
+          width: 100%;
+          text-align: center;
+          padding: 8px;
+          margin-top: 10px;
+          background: #f0f0f0;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+          cursor: pointer;
+        }
+        #accessibility-statement-btn:hover {
+          background: #e0e0e0;
+        }
+      `;
+      document.head.appendChild(styleElement);
+    }
+
+    // Cleanup function
+    return () => {
+      // We don't remove the container or styles on unmount
+      // to ensure the widget persists across page navigations
     };
-    
-    // Apply saved preferences
-    applyTextSizeEffect(savedTextSize);
-    applyContrastEffect(savedContrast);
-    applyReducedMotionEffect(savedReducedMotion);
   }, []);
 
-  // Handle click outside to close menu
+  // Apply accessibility settings when they change
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        isOpen && 
-        menuRef.current && 
-        !menuRef.current.contains(event.target) &&
-        buttonRef.current && 
-        !buttonRef.current.contains(event.target)
-      ) {
+    if (typeof document !== 'undefined') {
+      // Font size - apply to html element to affect the entire site
+      document.documentElement.style.fontSize = `${currentFontSize}%`;
+      
+      // High contrast
+      if (highContrast) {
+        document.body.classList.add('high-contrast');
+      } else {
+        document.body.classList.remove('high-contrast');
+      }
+      
+      // Grayscale
+      if (grayscale) {
+        document.body.classList.add('grayscale');
+      } else {
+        document.body.classList.remove('grayscale');
+      }
+      
+      // Highlight links
+      if (highlightLinks) {
+        document.body.classList.add('highlight-links');
+      } else {
+        document.body.classList.remove('highlight-links');
+      }
+      
+      // Keyboard navigation
+      if (keyboardNav) {
+        document.body.classList.add('keyboard-nav');
+      } else {
+        document.body.classList.remove('keyboard-nav');
+      }
+    }
+  }, [currentFontSize, highContrast, grayscale, highlightLinks, keyboardNav]);
+
+  // Load saved settings from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedSettings = localStorage.getItem('accessibilitySettings');
+      if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        setCurrentFontSize(settings.currentFontSize || 100);
+        setHighContrast(settings.highContrast || false);
+        setGrayscale(settings.grayscale || false);
+        setHighlightLinks(settings.highlightLinks || false);
+        setKeyboardNav(settings.keyboardNav || false);
+        setFullAccess(settings.fullAccess || false);
+      }
+    }
+  }, []);
+
+  // Save settings to localStorage when they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('accessibilitySettings', JSON.stringify({
+        currentFontSize,
+        highContrast,
+        grayscale,
+        highlightLinks,
+        keyboardNav,
+        fullAccess
+      }));
+    }
+  }, [currentFontSize, highContrast, grayscale, highlightLinks, keyboardNav, fullAccess]);
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.key === 'Escape' || e.key === 'Esc') && isOpen) {
         setIsOpen(false);
+        const toggleButton = document.getElementById('accessibility-toggle');
+        if (toggleButton) toggleButton.focus();
+      } else if (isOpen) {
+        const menu = document.getElementById('accessibility-menu');
+        if (!menu) return;
+        
+        const focusableItems = menu.querySelectorAll('button');
+        const index = Array.prototype.indexOf.call(focusableItems, document.activeElement);
+        
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (index < focusableItems.length - 1) {
+            focusableItems[index + 1].focus();
+          } else {
+            focusableItems[0].focus();
+          }
+        }
+        
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (index > 0) {
+            focusableItems[index - 1].focus();
+          } else {
+            focusableItems[focusableItems.length - 1].focus();
+          }
+        }
       }
     };
 
-    // Handle escape key to close menu
-    const handleEscapeKey = (event) => {
-      if (isOpen && event.key === 'Escape') {
-        setIsOpen(false);
-        buttonRef.current?.focus();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscapeKey);
-    
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscapeKey);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleTextSizeChange = (size) => {
-    setTextSize(size);
-    
-    if (!mounted) return;
-    
-    document.body.classList.remove(
-      'text-size-normal',
-      'text-size-large',
-      'text-size-larger',
-      'text-size-largest'
-    );
-    
-    document.body.classList.add(`text-size-${size}`);
-    localStorage.setItem('textSize', size);
-  };
-
-  const handleContrastChange = (mode) => {
-    setContrast(mode);
-    
-    if (!mounted) return;
-    
-    document.body.classList.remove(
-      'high-contrast',
-      'yellow-on-black'
-    );
-    
-    if (mode !== 'default') {
-      document.body.classList.add(mode);
+  // Increase text size
+  const increaseText = () => {
+    if (currentFontSize < 200) {
+      setCurrentFontSize(currentFontSize + 10);
     }
-    
-    localStorage.setItem('contrast', mode);
   };
 
-  const handleReducedMotionChange = () => {
-    const newValue = !reducedMotion;
-    setReducedMotion(newValue);
+  // Decrease text size
+  const decreaseText = () => {
+    if (currentFontSize > 100) {
+      setCurrentFontSize(currentFontSize - 10);
+    }
+  };
+
+  // Toggle high contrast
+  const toggleHighContrast = () => {
+    const newValue = !highContrast;
+    setHighContrast(newValue);
     
-    if (!mounted) return;
+    // Turn off grayscale if high contrast is enabled
+    if (newValue && grayscale) {
+      setGrayscale(false);
+    }
+  };
+
+  // Toggle grayscale
+  const toggleGrayscale = () => {
+    const newValue = !grayscale;
+    setGrayscale(newValue);
+    
+    // Turn off high contrast if grayscale is enabled
+    if (newValue && highContrast) {
+      setHighContrast(false);
+    }
+  };
+
+  // Toggle highlight links
+  const toggleHighlightLinks = () => {
+    setHighlightLinks(!highlightLinks);
+  };
+
+  // Toggle keyboard navigation
+  const toggleKeyboardNav = () => {
+    setKeyboardNav(!keyboardNav);
+  };
+
+  // Toggle full accessibility
+  const toggleFullAccess = () => {
+    const newValue = !fullAccess;
+    setFullAccess(newValue);
     
     if (newValue) {
-      document.body.classList.add('reduce-motion');
+      // Enable full accessibility mode
+      setHighContrast(true);
+      setHighlightLinks(true);
+      setKeyboardNav(true);
+      setCurrentFontSize(120);
     } else {
-      document.body.classList.remove('reduce-motion');
+      // Disable full accessibility mode
+      setHighContrast(false);
+      setGrayscale(false);
+      setHighlightLinks(false);
+      setKeyboardNav(false);
+      setCurrentFontSize(100);
     }
-    
-    localStorage.setItem('reducedMotion', newValue);
   };
 
-  if (!mounted) return null;
+  // Add modal close handler
+  const closeModal = (e) => {
+    if (e.target.id === 'accessibility-modal' || e.target.id === 'accessibility-modal-close') {
+      setIsModalOpen(false);
+    }
+  };
 
-  return (
-    <div className="relative">
-      <button
-        ref={buttonRef}
-        onClick={toggleMenu}
-        className={cn(
-          "p-2 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-          isOpen 
-            ? "bg-primary/10 text-primary" 
-            : "text-black hover:text-primary hover:bg-primary/5"
-        )}
-        aria-label="אפשרויות נגישות"
-        aria-expanded={isOpen}
-        aria-controls="accessibility-menu"
-      >
-        <Accessibility className="h-5 w-5" />
-      </button>
+  // Add keyboard handler for modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        setIsModalOpen(false);
+      }
+    };
 
-      {isOpen && (
-        <div
-          ref={menuRef}
-          id="accessibility-menu"
-          className="absolute left-0 mt-2 w-72 rounded-md shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 z-50"
-          role="menu"
-          aria-orientation="vertical"
-        >
-          <div className="py-3 px-4 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-black dark:text-white">אפשרויות נגישות</h3>
-          </div>
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isModalOpen]);
 
-          {/* Text Size */}
-          <div className="py-3 px-4 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center mb-3">
-              <Type className="h-4 w-4 ml-2" />
-              <span className="text-black dark:text-white font-medium">גודל טקסט</span>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => handleTextSizeChange('normal')}
-                className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary',
-                  textSize === 'normal'
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-black dark:text-white hover:bg-primary/10'
-                )}
-              >
-                רגיל
-              </button>
-              <button
-                onClick={() => handleTextSizeChange('large')}
-                className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary',
-                  textSize === 'large'
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-black dark:text-white hover:bg-primary/10'
-                )}
-              >
-                גדול
-              </button>
-              <button
-                onClick={() => handleTextSizeChange('larger')}
-                className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary',
-                  textSize === 'larger'
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-black dark:text-white hover:bg-primary/10'
-                )}
-              >
-                גדול יותר
-              </button>
-              <button
-                onClick={() => handleTextSizeChange('largest')}
-                className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary',
-                  textSize === 'largest'
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-black dark:text-white hover:bg-primary/10'
-                )}
-              >
-                גדול מאוד
-              </button>
-            </div>
-          </div>
+  // Render the widget directly into the DOM
+  useEffect(() => {
+    const container = document.getElementById('accessibility-root');
+    if (!container) return;
 
-          {/* Contrast */}
-          <div className="py-3 px-4 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center mb-3">
-              <Contrast className="h-4 w-4 ml-2" />
-              <span className="text-black dark:text-white font-medium">ניגודיות</span>
-            </div>
-            <div className="grid grid-cols-1 gap-2">
-              <button
-                onClick={() => handleContrastChange('default')}
-                className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary',
-                  contrast === 'default'
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-black dark:text-white hover:bg-primary/10'
-                )}
-              >
-                רגיל
-              </button>
-              <button
-                onClick={() => handleContrastChange('high-contrast')}
-                className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary',
-                  contrast === 'high-contrast'
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-black dark:text-white hover:bg-primary/10'
-                )}
-              >
-                ניגודיות גבוהה (שחור/לבן)
-              </button>
-              <button
-                onClick={() => handleContrastChange('yellow-on-black')}
-                className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary',
-                  contrast === 'yellow-on-black'
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-black dark:text-white hover:bg-primary/10'
-                )}
-              >
-                צהוב על שחור
-              </button>
-            </div>
-          </div>
+    // Create button element
+    const renderToggleButton = () => {
+      const button = document.createElement('button');
+      button.id = 'accessibility-toggle';
+      button.setAttribute('aria-controls', 'accessibility-menu');
+      button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      button.setAttribute('aria-label', 'פתח תפריט נגישות');
+      
+      // Accessibility icon SVG
+      button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-accessibility"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></svg>`;
+      // button.innerHTML = `<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"></path></svg>`;
+      
+      button.onclick = () => {
+        setIsOpen(!isOpen);
+        
+        // Focus first button when menu opens
+        if (!isOpen) {
+          setTimeout(() => {
+            const textSizeControls = document.querySelector('.text-size-control');
+            if (textSizeControls) {
+              const firstButton = textSizeControls.querySelector('button:first-child');
+              if (firstButton) firstButton.focus();
+            }
+          }, 10);
+        }
+      };
+      return button;
+    };
 
-          {/* Reduced Motion */}
-          <div className="py-3 px-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <MousePointerClick className="h-4 w-4 ml-2" />
-                <span className="text-black dark:text-white font-medium">הפחתת אנימציות</span>
-              </div>
-              <button
-                onClick={handleReducedMotionChange}
-                className={cn(
-                  'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary',
-                  reducedMotion ? 'bg-primary' : 'bg-gray-200 dark:bg-gray-700'
-                )}
-                role="switch"
-                aria-checked={reducedMotion}
-              >
-                <span className="sr-only">
-                  {reducedMotion ? 'כבה הפחתת אנימציות' : 'הפעל הפחתת אנימציות'}
-                </span>
-                <span
-                  className={cn(
-                    'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-                    reducedMotion ? 'translate-x-1' : 'translate-x-6'
-                  )}
-                />
-              </button>
-            </div>
-            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-              אפשרות זו מפחיתה או מבטלת אנימציות ואפקטים ויזואליים באתר
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+    // Create menu element
+    const renderMenu = () => {
+      const menu = document.createElement('div');
+      menu.id = 'accessibility-menu';
+      menu.className = isOpen ? 'open' : '';
+      menu.setAttribute('role', 'region');
+      menu.setAttribute('aria-label', 'תפריט נגישות');
+      menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      
+      // Text size controls
+      const textSizeControl = document.createElement('div');
+      textSizeControl.className = 'text-size-control';
+      
+      // Text size label
+      const textSizeLabel = document.createElement('span');
+      textSizeLabel.textContent = 'גודל טקסט:';
+      textSizeControl.appendChild(textSizeLabel);
+      
+      // Create a container for the size controls
+      const sizeControls = document.createElement('div');
+      sizeControls.className = 'size-controls';
+      
+      // Decrease text button
+      const decreaseTextBtn = document.createElement('button');
+      decreaseTextBtn.id = 'decrease-text';
+      decreaseTextBtn.type = 'button';
+      decreaseTextBtn.setAttribute('aria-label', 'הקטנת טקסט');
+      decreaseTextBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+      decreaseTextBtn.onclick = decreaseText;
+      sizeControls.appendChild(decreaseTextBtn);
+      
+      // Text size value
+      const textSizeValue = document.createElement('span');
+      textSizeValue.textContent = `${currentFontSize}%`;
+      sizeControls.appendChild(textSizeValue);
+      
+      // Increase text button
+      const increaseTextBtn = document.createElement('button');
+      increaseTextBtn.id = 'increase-text';
+      increaseTextBtn.type = 'button';
+      increaseTextBtn.setAttribute('aria-label', 'הגדלת טקסט');
+      increaseTextBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+      increaseTextBtn.onclick = increaseText;
+      sizeControls.appendChild(increaseTextBtn);
+      
+      // Add the size controls to the text size control
+      textSizeControl.appendChild(sizeControls);
+      
+      menu.appendChild(textSizeControl);
+      
+      // High contrast button
+      const highContrastBtn = document.createElement('button');
+      highContrastBtn.id = 'high-contrast-btn';
+      highContrastBtn.type = 'button';
+      highContrastBtn.setAttribute('aria-pressed', highContrast ? 'true' : 'false');
+      highContrastBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20M2 12h20"></path></svg><span>ניגודיות גבוהה</span>`;
+      highContrastBtn.onclick = toggleHighContrast;
+      menu.appendChild(highContrastBtn);
+      
+      // Grayscale button
+      const grayscaleBtn = document.createElement('button');
+      grayscaleBtn.id = 'grayscale-btn';
+      grayscaleBtn.type = 'button';
+      grayscaleBtn.setAttribute('aria-pressed', grayscale ? 'true' : 'false');
+      grayscaleBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><span>גווני אפור</span>`;
+      grayscaleBtn.onclick = toggleGrayscale;
+      menu.appendChild(grayscaleBtn);
+      
+      // Highlight links button
+      const highlightLinksBtn = document.createElement('button');
+      highlightLinksBtn.id = 'highlight-links-btn';
+      highlightLinksBtn.type = 'button';
+      highlightLinksBtn.setAttribute('aria-pressed', highlightLinks ? 'true' : 'false');
+      highlightLinksBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg><span>הדגשת קישורים</span>`;
+      highlightLinksBtn.onclick = toggleHighlightLinks;
+      menu.appendChild(highlightLinksBtn);
+      
+      // Keyboard navigation button
+      const keyboardNavBtn = document.createElement('button');
+      keyboardNavBtn.id = 'keyboard-nav-btn';
+      keyboardNavBtn.type = 'button';
+      keyboardNavBtn.setAttribute('aria-pressed', keyboardNav ? 'true' : 'false');
+      keyboardNavBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><path d="M6 8h4"></path><path d="M10 16h4"></path><path d="M14 8h4"></path><path d="M6 12h12"></path></svg><span>ניווט מקלדת</span>`;
+      keyboardNavBtn.onclick = toggleKeyboardNav;
+      menu.appendChild(keyboardNavBtn);
+      
+      // Full accessibility button
+      const fullAccessBtn = document.createElement('button');
+      fullAccessBtn.id = 'full-access-btn';
+      fullAccessBtn.type = 'button';
+      fullAccessBtn.setAttribute('aria-pressed', fullAccess ? 'true' : 'false');
+      fullAccessBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg><span>נגישות מלאה</span>`;
+      fullAccessBtn.onclick = toggleFullAccess;
+      menu.appendChild(fullAccessBtn);
+      
+      // Add accessibility statement button
+      const statementBtn = document.createElement('button');
+      statementBtn.id = 'accessibility-statement-btn';
+      statementBtn.type = 'button';
+      statementBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg><span>הצהרת נגישות</span>`;
+      statementBtn.onclick = () => setIsModalOpen(true);
+      menu.appendChild(statementBtn);
 
-export default AccessibilityMenu; 
+      return menu;
+    };
+
+    // Create modal element
+    const renderModal = () => {
+      const modal = document.createElement('div');
+      modal.id = 'accessibility-modal';
+      modal.className = isModalOpen ? 'open' : '';
+      modal.onclick = closeModal;
+
+      const content = document.createElement('div');
+      content.id = 'accessibility-modal-content';
+      
+      const closeButton = document.createElement('button');
+      closeButton.id = 'accessibility-modal-close';
+      closeButton.innerHTML = '×';
+      closeButton.setAttribute('aria-label', 'סגור הצהרת נגישות');
+      closeButton.onclick = closeModal;
+      
+      content.innerHTML = `
+        <h2>הצהרת נגישות</h2>
+        <p>
+          אנחנו, ב "Cicilia Import", רואים בנגישות ערך עליון, ואתר "Cicilia Import" עומד בדרישות תקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע"ג 2013. התאמות הנגישות בוצעו על פי המלצות התקן הישראלי (ת"י 5568) לנגישות תכנים באינטרנט ברמה AA ומסמך WCAG 2.0.
+        </p>
+        <p>
+          <strong>הממשק:</strong><br>
+          "Cicilia Import" מותאם לדפדפנים הנפוצים ולשימוש בטלפון הנייד. הממשק מאפשר לגולשים להתאים את תצוגת האתר ולהפעיל אותו באמצעים שונים, דוגמת תוכנות לקריאת מסך ועל ידי המקלדת.
+        </p>
+        <p>
+          <strong>התאמות נגישות באתר:</strong>
+          <ul>
+            <li>שינוי גודל טקסט</li>
+            <li>ניגודיות גבוהה</li>
+            <li>מצב גווני אפור</li>
+            <li>הדגשת קישורים</li>
+            <li>ניווט מקלדת</li>
+            <li>נגישות מלאה</li>
+          </ul>
+        </p>
+        <p>
+          <strong>יצירת קשר:</strong><br>
+          אם נתקלתם בבעיה או שיש לכם הצעות לשיפור הנגישות, נשמח לשמוע מכם. ניתן ליצור קשר באמצעות:<br>
+          דוא"ל: <a href="mailto:Ronen_kh@hotmail.com">Ronen_kh@hotmail.com</a>
+        </p>
+      `;
+
+      content.insertBefore(closeButton, content.firstChild);
+      modal.appendChild(content);
+      return modal;
+    };
+
+    // Clear container and render components
+    container.innerHTML = '';
+    container.appendChild(renderToggleButton());
+    container.appendChild(renderMenu());
+    container.appendChild(renderModal());
+  }, [isOpen, currentFontSize, highContrast, grayscale, highlightLinks, keyboardNav, fullAccess, isModalOpen]);
+
+  // This component doesn't render anything in the React tree
+  return null;
+} 
