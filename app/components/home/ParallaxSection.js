@@ -21,7 +21,7 @@ const ParallaxSection = () => {
       icon: <Sparkles className="text-primary h-7 w-7" aria-hidden="true" />,
       iconBg: "bg-primary/10",
       title: "טכנולוגיה מתקדמת",
-      description: "אנו משתמשים בציוד הרפואי המתקדם ביותר לאבחון וטיפול",
+      description: "הציוד הרפואי המתקדם ביותר לאבחון וטיפול",
       bgColor: "bg-white/90",
       mdMt: ""
     },
@@ -259,7 +259,7 @@ const ParallaxSection = () => {
                   </div>
                   
                   {/* Slider controls */}
-                  {/* <div className="flex justify-between absolute top-1/2 -translate-y-1/2 left-0 right-0 px-2 z-10">
+                  <div className="flex justify-center items-center mt-6 gap-2 -translate-y-1/2 left-0 right-0 px-2 z-10">
                     <button 
                       onClick={prevSlide}
                       className="bg-white/80 backdrop-blur-sm text-gray-800 p-2 rounded-full shadow-md hover:bg-white"
@@ -274,16 +274,17 @@ const ParallaxSection = () => {
                     >
                       <ChevronLeft className="h-5 w-5" />
                     </button>
-                  </div> */}
+                  </div>
                 </div>
                 
                 {/* Slider indicators */}
-                <div className="flex justify-center mt-4 space-x-2 rtl:space-x-reverse">
+                <div className="flex justify-center mt-4 gap-2 ">
+                  
                   {featureCards.map((_, index) => (
                     <button
                       key={index}
                       className={`h-2 rounded-full transition-colors ${
-                        currentSlide === index ? 'w-6 bg-primary' : 'w-2 bg-gray-300'
+                        currentSlide === index ? 'w-2 bg-primary' : 'w-2 bg-gray-300'
                       }`}
                       onClick={() => goToSlide(index)}
                       aria-label={`עבור לכרטיס ${index + 1}`}
