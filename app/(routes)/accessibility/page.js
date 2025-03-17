@@ -26,7 +26,7 @@ export default function AccessibilityPage() {
           
           <div className="prose prose-lg max-w-none">
             <p className="text-lg mb-8">
-              אתר זה מיועד לשימוש כלל הציבור, כולל אנשים עם מוגבלויות. אנו מחויבים להנגיש את האתר בהתאם לתקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע"ג-2013 ולתקן הישראלי (ת"י 5568) לנגישות תכנים באינטרנט.
+              אתר זה מיועד לשימוש כלל הציבור, כולל אנשים עם מוגבלויות. אנו מחויבים להנגיש את האתר בהתאם לתקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע&quot;ג-2013 ולתקן הישראלי (ת&quot;י 5568) לנגישות תכנים באינטרנט.
             </p>
             
             <h2 className="text-2xl font-bold mt-10 mb-4 text-primary">אמצעי הנגישות באתר</h2>
@@ -44,7 +44,7 @@ export default function AccessibilityPage() {
             
             <h2 className="text-2xl font-bold mt-10 mb-4 text-primary">כיצד להשתמש באמצעי הנגישות</h2>
             <p className="mb-6">
-              באתר מוטמע וידג'ט נגישות המאפשר התאמה אישית של תצוגת האתר. הוידג'ט ממוקם בצד שמאל של המסך ומסומן בסמל הנגישות הבינלאומי.
+              באתר מוטמע וידג&lsquo;ט נגישות המאפשר התאמה אישית של תצוגת האתר. הוידג&lsquo;ט ממוקם בצד שמאל של המסך ומסומן בסמל הנגישות הבינלאומי.
               לחיצה על הסמל תפתח את תפריט הנגישות, המאפשר:
             </p>
             <ul className="list-disc list-inside mb-6 space-y-2">
@@ -74,12 +74,12 @@ export default function AccessibilityPage() {
               אנו מתחייבים לטפל בפניות בנושא נגישות בהקדם האפשרי ולעשות כל מאמץ לפתור את הבעיה.
             </p>
             
-            <h2 className="text-2xl font-bold mt-10 mb-4 text-primary">רכז נגישות</h2>
+            {/* <h2 className="text-2xl font-bold mt-10 mb-4 text-primary">רכז נגישות</h2>
             <p className="mb-6">
               רכז הנגישות מטעמנו הוא: [שם רכז הנגישות]<br />
               טלפון: [מספר טלפון]<br />
-              דוא"ל: [כתובת דוא"ל]
-            </p>
+              דוא&lsquo;ל: [כתובת דוא&lsquo;ל]
+            </p> */}
             
             <p className="mt-10 text-lg font-semibold">
               הצהרת נגישות זו עודכנה לאחרונה בתאריך: {new Date().toLocaleDateString('he-IL')}

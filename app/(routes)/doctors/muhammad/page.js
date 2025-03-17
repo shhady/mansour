@@ -33,7 +33,7 @@ export default function DrMuhammadProfile() {
             </div>
           </div>
           <div className="md:w-2/3 md:pr-6 text-white">
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">ד"ר מוחמד מנסור</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-3">ד&quot;ר מוחמד מנסור</h1>
             <h2 className="text-xl md:text-2xl font-semibold mb-4">מומחה בכירורגיה פלסטית ואסתטית</h2>
             <p className="text-lg mb-6">
               רופא בכיר ביחידה לכירורגיה פלסטית ומשחזרת בבית החולים בני ציון וכירורג פלסטי ואסתטי בכללית אסתטיקה.
@@ -90,10 +90,10 @@ export default function DrMuhammadProfile() {
       <div className="bg-white rounded-xl shadow-md p-6 md:p-8 mb-12">
         {/* About Section */}
         <div className={activeTab === "about" ? "block" : "hidden"}>
-          <h2 className="text-2xl font-bold mb-6 text-primary">אודות ד"ר מוחמד מנסור</h2>
+          <h2 className="text-2xl font-bold mb-6 text-primary">אודות ד&quot;ר מוחמד מנסור</h2>
           <div className="space-y-6">
             <p className="text-lg">
-              ד"ר מוחמד מנסור הוא מומחה בכירורגיה פלסטית, אסתטית ומשחזרת, עם ניסיון רב בביצוע ניתוחים פלסטיים מתקדמים ושחזוריים.
+              ד&quot;ר מוחמד מנסור הוא מומחה בכירורגיה פלסטית, אסתטית ומשחזרת, עם ניסיון רב בביצוע ניתוחים פלסטיים מתקדמים ושחזוריים.
             </p>
             <p className="text-lg">
               הוא משמש כרופא בכיר ביחידה לכירורגיה פלסטית ומשחזרת בבית החולים בני ציון, וכן ככירורג פלסטי ואסתטי בכללית אסתטיקה. בנוסף, הוא עובד כמנתח פלסטי בקופות החולים כללית ומכבי.
@@ -184,7 +184,7 @@ export default function DrMuhammadProfile() {
                 <Building2 className="text-primary h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold">סטאז' והתמחות בכירורגיה פלסטית</h3>
+                <h3 className="text-xl font-semibold">סטאז&apos; והתמחות בכירורגיה פלסטית</h3>
                 <p className="text-gray-700">המרכז הרפואי בילינסון</p>
               </div>
             </div>
@@ -216,7 +216,7 @@ export default function DrMuhammadProfile() {
                 <MapPin className="text-primary h-5 w-5 mt-1 ml-3" />
                 <div>
                   <h3 className="font-semibold text-lg">מרפאה בנצרת</h3>
-                  <p className="text-lg">מרג' אבן עאמר 15, נצרת, כביש עוקף נצרת</p>
+                  <p className="text-lg">מרג&apos; אבן עאמר 15, נצרת, כביש עוקף נצרת</p>
                 </div>
               </div>
               <div className="flex items-start">
@@ -241,15 +241,15 @@ export default function DrMuhammadProfile() {
               </h3>
               <div className="bg-accent rounded-lg p-6">
                 <div className="flex justify-between py-3 border-b border-gray-200">
-                  <span className="font-medium">יום א'</span>
+                  <span className="font-medium">יום א&quot;</span>
                   <span>09:00 - 17:00</span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-gray-200">
-                  <span className="font-medium">יום ג'</span>
+                  <span className="font-medium">יום ג&quot;</span>
                   <span>14:00 - 19:00</span>
                 </div>
                 <div className="flex justify-between py-3">
-                  <span className="font-medium">יום ה'</span>
+                  <span className="font-medium">יום ה&apos;</span>
                   <span>09:00 - 14:00</span>
                 </div>
               </div>
@@ -297,7 +297,7 @@ export default function DrMuhammadProfile() {
           </div>
           <div>
             <label htmlFor="email" className="block mb-2 font-medium">
-              דוא"ל
+              דוא&quot;ל
             </label>
             <input
               type="email"

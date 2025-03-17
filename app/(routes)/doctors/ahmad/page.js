@@ -33,7 +33,7 @@ export default function DrAhmadProfile() {
             </div>
           </div>
           <div className="md:w-2/3 md:pr-6 text-white">
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">ד"ר אחמד מנסור</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-3">ד`&quot;ר אחמד מנסור</h1>
             <h2 className="text-xl md:text-2xl font-semibold mb-4">רופא עיניים מומחה | אוקולופלסטיקה</h2>
             <p className="text-lg mb-6">
               רופא בכיר במערך העיניים של המרכז הרפואי סורוקה בבאר שבע ורכז תחום רפואת עיניים בשירותי בריאות כללית, מחוז שרון-שומרון.
@@ -90,10 +90,10 @@ export default function DrAhmadProfile() {
       <div className="bg-white rounded-xl shadow-md p-6 md:p-8 mb-12">
         {/* About Section */}
         <div className={activeTab === "about" ? "block" : "hidden"}>
-          <h2 className="text-2xl font-bold mb-6 text-primary">אודות ד"ר אחמד מנסור</h2>
+          <h2 className="text-2xl font-bold mb-6 text-primary">אודות ד`&quot;ר אחמד מנסור</h2>
           <div className="space-y-6">
             <p className="text-lg">
-              ד"ר אחמד מנסור הוא רופא עיניים מומחה עם התמחות-על בכירורגיה פלסטית של העין (אוקולופלסטיקה), המתמקדת בניתוחי עפעפיים, ארובת העין ודרכי הדמעות.
+              ד`&quot;ר אחמד מנסור הוא רופא עיניים מומחה עם התמחות-על בכירורגיה פלסטית של העין (אוקולופלסטיקה), המתמקדת בניתוחי עפעפיים, ארובת העין ודרכי הדמעות.
             </p>
             <p className="text-lg">
               הוא משמש כרופא בכיר במערך העיניים של המרכז הרפואי סורוקה בבאר שבע. בנוסף, הוא מכהן כרכז תחום רפואת עיניים בשירותי בריאות כללית, מחוז שרון-שומרון.
@@ -118,7 +118,7 @@ export default function DrAhmadProfile() {
               <ul className="list-disc list-inside space-y-2 text-gray-700">
                 <li>הזרקות בוטוקס</li>
                 <li>מילויים (פילרים)</li>
-                <li>טיפולי אנטי-אייג'ינג</li>
+                <li>טיפולי אנטי-אייג&apos;ינג</li>
               </ul>
             </div>
             <div className="bg-accent rounded-lg p-6 shadow-sm">
@@ -234,11 +234,11 @@ export default function DrAhmadProfile() {
               </h3>
               <div className="bg-accent rounded-lg p-6">
                 <div className="flex justify-between py-3 border-b border-gray-200">
-                  <span className="font-medium">יום ד'</span>
+                  <span className="font-medium">יום ד&quot;</span>
                   <span>16:00 - 17:30</span>
                 </div>
                 <div className="flex justify-between py-3">
-                  <span className="font-medium">יום ו'</span>
+                  <span className="font-medium">יום ו&apos;</span>
                   <span>08:00 - 10:30</span>
                 </div>
               </div>
@@ -286,7 +286,7 @@ export default function DrAhmadProfile() {
           </div>
           <div>
             <label htmlFor="email" className="block mb-2 font-medium">
-              דוא"ל
+              דוא`&quot;ל
             </label>
             <input
               type="email"
